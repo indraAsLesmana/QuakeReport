@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/item_height"
+    android:orientation="horizontal"
+    android:padding="@dimen/margin_right"
+    >
+
+    <TextView
+        android:id="@+id/magnitude"
+        style="@style/text_itemstyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="7.6" />
+
+    <TextView
+        android:id="@+id/location"
+        style="@style/text_itemstyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:text="Papua Nugenia"
+        />
+
+    <TextView
+        android:id="@+id/date"
+        style="@style/text_itemstyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:text="24 Nov, 2013"
+        />
+
+</LinearLayout>
