@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.quakereport.R;
+import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.model.ContactModel;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
 
     private ContactModel mQuekeData;
     private TextView mMagnitude, mLocation, mDate;
+    private ImageView mImageBackground;
 
     public EarthquakeAdapter(Context context, ArrayList<ContactModel> quekeData) {
         super(context, 0, quekeData);
@@ -43,10 +46,21 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
         mMagnitude = (TextView) listItemView.findViewById(R.id.magnitude);
         mLocation = (TextView) listItemView.findViewById(R.id.location);
         mDate = (TextView) listItemView.findViewById(R.id.date);
+        mImageBackground = (ImageView) listItemView.findViewById(R.id.imagebackground);
 
-        mMagnitude.setText(mQuekeData.getmMag());
+        String magnitude = mQuekeData.getmMag();
+
+        mMagnitude.setText(magnitude);
         mLocation.setText(mQuekeData.getmTitle());
-        mDate.setText(mQuekeData.getmTime());
+        mDate.setText(Helpers.convertUnixTime(mQuekeData.getmTime()));
+
+        float mMagnitudeData = Float.parseFloat(magnitude);
+
+        if (mMagnitudeData <= 6.0){mImageBackground.setImageResource(R.drawable.color_green);
+        } else if (mMagnitudeData <= 6.4){mImageBackground.setImageResource(R.drawable.color_dusty_yellow);
+        } else if (mMagnitudeData <= 7.0){mImageBackground.setImageResource(R.drawable.color_mustard_yellow);
+        } else if (mMagnitudeData <= 9.0 ){mImageBackground.setImageResource(R.drawable.color_red);
+        }
 
         return listItemView;
     }
