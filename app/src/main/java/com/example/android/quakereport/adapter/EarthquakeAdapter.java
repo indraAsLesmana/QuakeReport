@@ -40,10 +40,10 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
         }
         mQuekeData = getItem(position);
 
-        mMagnitude = (TextView) listItemView.findViewById(R.id.magnitude);
+        /*mMagnitude = (TextView) listItemView.findViewById(R.id.magnitude);
         mLocation = (TextView) listItemView.findViewById(R.id.location);
         mDate = (TextView) listItemView.findViewById(R.id.date);
-
+*/
         mMagnitude.setText(mQuekeData.getmMagnitude());
         mLocation.setText(mQuekeData.getmLocation());
         mDate.setText(mQuekeData.getmDate());

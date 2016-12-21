@@ -1,36 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/item_height"
-    android:orientation="horizontal"
-    android:padding="@dimen/margin_right"
-    >
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dip"
+        android:textColor="@color/colorAccent" />
 
     <TextView
-        android:id="@+id/magnitude"
-        style="@style/text_itemstyle"
-        android:layout_width="0dp"
+        android:id="@+id/mobile"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="7.6" />
-
-    <TextView
-        android:id="@+id/location"
-        style="@style/text_itemstyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="5"
-        android:text="Papua Nugenia"
-        />
-
-    <TextView
-        android:id="@+id/date"
-        style="@style/text_itemstyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:text="24 Nov, 2013"
-        />
+        android:textColor="#5d5d5d"
+        android:textStyle="bold" />
 
 </LinearLayout>
