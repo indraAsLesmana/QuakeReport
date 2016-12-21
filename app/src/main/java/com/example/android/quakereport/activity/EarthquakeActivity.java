@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.adapter.EarthquakeAdapter;
+import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.HttpHandler;
 import com.example.android.quakereport.model.ContactModel;
 
@@ -59,44 +60,26 @@ public class EarthquakeActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            String url = "http://api.androidhive.info/contacts/";
-            String jsonStr = sh.makeServiceCall(url);
+            String jsonStr = sh.makeServiceCall(Constant.MAIN_URL);
             Log.e(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
 
                     // Getting JSON Array node
-                    JSONArray contacts = jsonObj.getJSONArray("contacts");
+                    JSONArray contacts = jsonObj.getJSONArray("features");
 
                     // looping through All Contacts
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
-                        String id = c.getString("id");
-                        String name = c.getString("name");
-                        String email = c.getString("email");
-                        String address = c.getString("address");
-                        String gender = c.getString("gender");
 
-                        // Phone node is JSON Object
-                        JSONObject phone = c.getJSONObject("phone");
-                        String mobile = phone.getString("mobile");
-                        String home = phone.getString("home");
-                        String office = phone.getString("office");
+                        // Phone node is JSON properties
+                        JSONObject phone = c.getJSONObject("properties");
+                        String mag = phone.getString("mag");
+                        String title = phone.getString("title");
+                        String time = phone.getString("updated");
 
-                        dataContact.add(new ContactModel(id, name, email, address, gender));
-
-                        /*// tmp hash map for single dataContact
-                        HashMap<String, String> dataContact = new HashMap<>();
-
-                        // adding each child node to HashMap key => value
-                        dataContact.put("id", id);
-                        dataContact.put("name", name);
-                        dataContact.put("email", email);
-                        dataContact.put("mobile", mobile);
-
-                        // adding dataContact to dataContact list
-                        contactList.add(dataContact);*/
+                        dataContact.add(new ContactModel(mag, title, time));
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());

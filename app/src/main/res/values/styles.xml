@@ -22,8 +22,7 @@
     </style>
 
     <style name="text_itemstyle">
-        <item name="android:textAppearance">?android:textAppearanceMedium
-        </item> <!-- fix with this-->
+        <item name="android:textAppearance">?android:textAppearanceSmall</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
     </style>
 

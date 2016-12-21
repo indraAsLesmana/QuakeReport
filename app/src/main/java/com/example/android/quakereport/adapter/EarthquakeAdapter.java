@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.model.ContactModel;
-import com.example.android.quakereport.model.EarthquakeModel;
 
 import java.util.ArrayList;
 
@@ -45,9 +44,9 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
         mLocation = (TextView) listItemView.findViewById(R.id.location);
         mDate = (TextView) listItemView.findViewById(R.id.date);
 
-        mMagnitude.setText(mQuekeData.getmId());
-        mLocation.setText(mQuekeData.getmEmail());
-        mDate.setText(mQuekeData.getmGender());
+        mMagnitude.setText(mQuekeData.getmMag());
+        mLocation.setText(mQuekeData.getmTitle());
+        mDate.setText(mQuekeData.getmTime());
 
         return listItemView;
     }

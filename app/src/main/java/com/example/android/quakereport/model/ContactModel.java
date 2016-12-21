@@ -6,38 +6,23 @@ package com.example.android.quakereport.model;
 
 public class ContactModel {
 
-    private String mId, mName, mEmail, mAddress, mGender;
-    private boolean gender;
+    private String mMag, mTitle, mTime;
 
-    public ContactModel(String mId, String mName, String mEmail, String mAddress, String mGender) {
-        this.mId = mId;
-        this.mName = mName;
-        this.mEmail = mEmail;
-        this.mAddress = mAddress;
-        this.mGender = mGender;
+    public ContactModel(String mMag, String mTitle, String mTime) {
+        this.mMag = mMag;
+        this.mTitle = mTitle;
+        this.mTime = mTime;
     }
 
-    public String getmId() {
-        return mId;
+    public String getmMag() {
+        return mMag;
     }
 
-    public String getmName() {
-        return mName;
+    public String getmTitle() {
+        return mTitle;
     }
 
-    public String getmEmail() {
-        return mEmail;
-    }
-
-    public String getmAddress() {
-        return mAddress;
-    }
-
-    public String getmGender() {
-        return mGender;
-    }
-
-    public boolean isGender() {
-        return gender;
+    public String getmTime() {
+        return mTime;
     }
 }
