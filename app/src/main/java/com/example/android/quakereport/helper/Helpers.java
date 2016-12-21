@@ -16,9 +16,7 @@ public class Helpers {
     public static String convertUnixTime(String longtime) {
         long unixSeconds = Long.parseLong(longtime);
         Date date = new Date(unixSeconds * 1000L); // *1000 is to convert seconds to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // the format of your date
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT-7")); // give a timezone reference for formating (see comment at the bottom
-        String formattedDate = sdf.format(date);
+        String formattedDate = Constant.DATE_FORMAT_MMM_DD_YYYY.format(date);
         return formattedDate;
     }
 }
