@@ -24,4 +24,5 @@ public class EarthquakeModel {
     public String getmDate() {
         return mDate;
     }
+
 }
