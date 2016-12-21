@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.android.quakereport.R;
+import com.example.android.quakereport.model.ContactModel;
 import com.example.android.quakereport.model.EarthquakeModel;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import java.util.ArrayList;
  * Created by indraaguslesmana on 12/21/16.
  */
 
-public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
+public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
 
-    private EarthquakeModel mQuekeData;
+    private ContactModel mQuekeData;
     private TextView mMagnitude, mLocation, mDate;
 
-    public EarthquakeAdapter(Context context, ArrayList<EarthquakeModel> quekeData) {
+    public EarthquakeAdapter(Context context, ArrayList<ContactModel> quekeData) {
         super(context, 0, quekeData);
         /**
          * 0 is resource id, why 0 ? becouse we custom the view right here getView()
@@ -44,9 +45,9 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
         mLocation = (TextView) listItemView.findViewById(R.id.location);
         mDate = (TextView) listItemView.findViewById(R.id.date);
 
-        mMagnitude.setText(mQuekeData.getmMagnitude());
-        mLocation.setText(mQuekeData.getmLocation());
-        mDate.setText(mQuekeData.getmDate());
+        mMagnitude.setText(mQuekeData.getmId());
+        mLocation.setText(mQuekeData.getmEmail());
+        mDate.setText(mQuekeData.getmGender());
 
         return listItemView;
     }
