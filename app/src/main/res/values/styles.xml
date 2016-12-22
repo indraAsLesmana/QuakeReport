@@ -24,12 +24,14 @@
     <style name="text_itemstyle_medium">
         <item name="android:textAppearance">?android:textAppearanceSmall</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
+        <item name="android:layout_marginLeft">16dp</item>
     </style>
 
     <style name="text_itemstyle_large">
-        <item name="android:textAppearance">?android:textAppearanceMedium
-        </item> <!-- fix with this-->
+        <item name="android:textAppearance">?android:textAppearanceMedium</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_marginLeft">16dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

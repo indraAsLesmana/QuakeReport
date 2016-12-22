@@ -25,6 +25,7 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
     private TextView mMagnitude, mLocation, mDate;
     private ImageView mImageBackground;
     private TextView mLocation_spesific;
+    private TextView mDate_time;
 
     public EarthquakeAdapter(Context context, ArrayList<ContactModel> quekeData) {
         super(context, 0, quekeData);
@@ -48,34 +49,46 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
         mLocation_spesific = (TextView) listItemView.findViewById(R.id.location_spesific);
         mLocation = (TextView) listItemView.findViewById(R.id.location);
         mDate = (TextView) listItemView.findViewById(R.id.date);
+        mDate_time = (TextView) listItemView.findViewById(R.id.date_time);
         mImageBackground = (ImageView) listItemView.findViewById(R.id.imagebackground);
 
         String magnitude = mQuekeData.getmMag();
         String placeResult = mQuekeData.getmPlace();
-
+        String time = String.valueOf(mQuekeData.getmTime());
         /**
          * @param placeResult check is contain of or not.
          * */
-        if (placeResult.contains("of")){
-            String splitResult [] = placeResult.split("of", 2);
+        if (placeResult.contains("of ")){
+            String splitResult [] = placeResult.split("of ", 2);
             mLocation_spesific.setText(splitResult[0] + "of");
             mLocation.setText(splitResult[1]);
         }else {
-            mLocation_spesific.setText("---");
+            mLocation_spesific.setText("--");
             mLocation.setText(placeResult);
         }
 
-        mMagnitude.setText(magnitude);
-        mDate.setText(Helpers.convertUnixTime(mQuekeData.getmTime()));
+        /**
+         * fix UnixTimeStamp Respone Value to long
+         * */
+        if (time.length() >= 10){
+            time = time.substring(0, 10);
+        }
+        mDate.setText(Helpers.convertUnixDay(time));
+        mDate_time.setText(Helpers.convertUnixTime(time));
 
-        float mMagnitudeData = Float.parseFloat(magnitude);
+        mMagnitude.setText(magnitude);
+
+        /**
+         *make change color for diefferent value of magnitude Value
+         * */
+        /*float mMagnitudeData = Float.parseFloat(magnitude);
 
         if (mMagnitudeData <= 6.0){mImageBackground.setImageResource(R.drawable.color_green);
         } else if (mMagnitudeData <= 6.4){mImageBackground.setImageResource(R.drawable.color_dusty_yellow);
         } else if (mMagnitudeData <= 7.0){mImageBackground.setImageResource(R.drawable.color_mustard_yellow);
         } else if (mMagnitudeData <= 9.0 ){mImageBackground.setImageResource(R.drawable.color_red);
         }
-
+*/
         return listItemView;
     }
 }
