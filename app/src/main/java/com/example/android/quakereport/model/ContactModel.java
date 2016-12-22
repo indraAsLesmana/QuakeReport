@@ -6,11 +6,12 @@ package com.example.android.quakereport.model;
 
 public class ContactModel {
 
-    private String mMag, mTitle, mTime;
+    private String mMag, mPlace;
+    private long mTime;
 
-    public ContactModel(String mMag, String mTitle, String mTime) {
+    public ContactModel(String mMag, String mPlace, long mTime) {
         this.mMag = mMag;
-        this.mTitle = mTitle;
+        this.mPlace = mPlace;
         this.mTime = mTime;
     }
 
@@ -18,11 +19,11 @@ public class ContactModel {
         return mMag;
     }
 
-    public String getmTitle() {
-        return mTitle;
+    public String getmPlace() {
+        return mPlace;
     }
 
-    public String getmTime() {
+    public long getmTime() {
         return mTime;
     }
 }

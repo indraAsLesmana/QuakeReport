@@ -24,6 +24,7 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
     private ContactModel mQuekeData;
     private TextView mMagnitude, mLocation, mDate;
     private ImageView mImageBackground;
+    private TextView mLocation_spesific;
 
     public EarthquakeAdapter(Context context, ArrayList<ContactModel> quekeData) {
         super(context, 0, quekeData);
@@ -44,14 +45,27 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
         mQuekeData = getItem(position);
 
         mMagnitude = (TextView) listItemView.findViewById(R.id.magnitude);
+        mLocation_spesific = (TextView) listItemView.findViewById(R.id.location_spesific);
         mLocation = (TextView) listItemView.findViewById(R.id.location);
         mDate = (TextView) listItemView.findViewById(R.id.date);
         mImageBackground = (ImageView) listItemView.findViewById(R.id.imagebackground);
 
         String magnitude = mQuekeData.getmMag();
+        String placeResult = mQuekeData.getmPlace();
+
+        /**
+         * @param placeResult check is contain of or not.
+         * */
+        if (placeResult.contains("of")){
+            String splitResult [] = placeResult.split("of", 2);
+            mLocation_spesific.setText(splitResult[0] + "of");
+            mLocation.setText(splitResult[1]);
+        }else {
+            mLocation_spesific.setText("---");
+            mLocation.setText(placeResult);
+        }
 
         mMagnitude.setText(magnitude);
-        mLocation.setText(mQuekeData.getmTitle());
         mDate.setText(Helpers.convertUnixTime(mQuekeData.getmTime()));
 
         float mMagnitudeData = Float.parseFloat(magnitude);

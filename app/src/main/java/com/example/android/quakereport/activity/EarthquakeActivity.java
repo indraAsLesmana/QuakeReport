@@ -74,12 +74,12 @@ public class EarthquakeActivity extends AppCompatActivity {
                         JSONObject c = contacts.getJSONObject(i);
 
                         // Phone node is JSON properties
-                        JSONObject phone = c.getJSONObject("properties");
-                        String mag = phone.getString("mag");
-                        String title = phone.getString("title");
-                        String time = phone.getString("updated");
+                        JSONObject data = c.getJSONObject("properties");
+                        String mag = data.getString("mag");
+                        String place = data.getString("place");
+                        long time = data.getLong("time");
 
-                        dataContact.add(new ContactModel(mag, title, time));
+                        dataContact.add(new ContactModel(mag, place, time));
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());

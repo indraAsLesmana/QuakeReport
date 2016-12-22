@@ -21,8 +21,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="text_itemstyle">
+    <style name="text_itemstyle_medium">
         <item name="android:textAppearance">?android:textAppearanceSmall</item> <!-- fix with this-->
+        <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
+    </style>
+
+    <style name="text_itemstyle_large">
+        <item name="android:textAppearance">?android:textAppearanceMedium
+        </item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
     </style>
 

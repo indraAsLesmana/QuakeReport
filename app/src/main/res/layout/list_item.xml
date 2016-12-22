@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="@dimen/item_height"
+    android:layout_height="@dimen/item_height"
     android:orientation="horizontal"
     android:padding="@dimen/margin_right">
 
@@ -21,7 +20,7 @@
 
         <TextView
             android:id="@+id/magnitude"
-            style="@style/text_itemstyle"
+            style="@style/text_itemstyle_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="7.6"
@@ -31,22 +30,60 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/location"
-        style="@style/text_itemstyle"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="5"
-        android:text="Papua Nugenia"
-        />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/date"
-        style="@style/text_itemstyle"
+        <TextView
+            android:id="@+id/location_spesific"
+            style="@style/text_itemstyle_medium"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Papua Nugenia"
+            android:gravity="bottom"
+            />
+
+        <TextView
+            android:id="@+id/location"
+            style="@style/text_itemstyle_large"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Papua xxxx"
+            android:gravity="top"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="3"
-        android:text="24 Nov, 2013"
-        />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/date"
+            style="@style/text_itemstyle_medium"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="24 Nov, 2013"
+            android:gravity="right|bottom"
+            />
+
+        <TextView
+            android:id="@+id/date_time"
+            style="@style/text_itemstyle_medium"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="right|top"
+            android:text="24 Nov, 2013" />
+
+    </LinearLayout>
 
 </LinearLayout>
