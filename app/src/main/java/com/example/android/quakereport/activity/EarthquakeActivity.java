@@ -26,7 +26,7 @@ import com.example.android.quakereport.R;
 import com.example.android.quakereport.adapter.EarthquakeAdapter;
 import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.HttpHandler;
-import com.example.android.quakereport.model.ContactModel;
+import com.example.android.quakereport.model.EarthquakeModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +40,7 @@ public class EarthquakeActivity extends AppCompatActivity {
     private ListView earthquakeListView;
 
     //    ArrayList<HashMap<String, String>> contactList;
-    private ArrayList<ContactModel> dataContact;
+    private ArrayList<EarthquakeModel> dataEarthqueake;
     private ListView lv;
 
     @Override
@@ -48,7 +48,7 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        dataContact = new ArrayList<>();
+        dataEarthqueake = new ArrayList<>();
         // Find a reference to the {@link ListView} in the layout
         earthquakeListView = (ListView) findViewById(R.id.list);
         new GetContact().execute();
@@ -75,11 +75,11 @@ public class EarthquakeActivity extends AppCompatActivity {
 
                         // Phone node is JSON properties
                         JSONObject data = c.getJSONObject("properties");
-                        String mag = data.getString("mag");
+                        double mag = data.getDouble("mag");
                         String place = data.getString("place");
                         long time = data.getLong("time");
 
-                        dataContact.add(new ContactModel(mag, place, time));
+                        dataEarthqueake.add(new EarthquakeModel(mag, place, time));
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -119,7 +119,7 @@ public class EarthquakeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            EarthquakeAdapter adapter = new EarthquakeAdapter(EarthquakeActivity.this, dataContact);
+            EarthquakeAdapter adapter = new EarthquakeAdapter(EarthquakeActivity.this, dataEarthqueake);
             earthquakeListView.setAdapter(adapter);
         }
     }

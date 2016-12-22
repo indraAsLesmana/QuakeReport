@@ -2,6 +2,7 @@ package com.example.android.quakereport.helper;
 
 import org.joda.time.DateTime;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -34,6 +35,15 @@ public class Helpers {
         DateTime _startDate = new DateTime(longtime * 1000L);
 //        String formattedDate = Constant.DATE_FORMAT_MMM_DD_YYYY.format(_startDate);
         return _startDate;
+    }
+
+    /**
+     * Return the formatted magnitude string showing 1 decimal place (i.e. "3.2")
+     * from a decimal magnitude value.
+     */
+    public static String formatMagnitude(double magnitude) {
+        DecimalFormat magnitudeFormat = new DecimalFormat("0.0");
+        return magnitudeFormat.format(magnitude);
     }
 
 }

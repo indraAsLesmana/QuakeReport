@@ -25,13 +25,13 @@
         <item name="android:textAppearance">?android:textAppearanceSmall</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
         <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:textColor">@color/colorText_location</item>
     </style>
 
     <style name="text_itemstyle_large">
         <item name="android:textAppearance">?android:textAppearanceMedium</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
-        <item name="android:ellipsize">end</item>
-        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

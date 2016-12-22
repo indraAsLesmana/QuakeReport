@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.helper.Helpers;
-import com.example.android.quakereport.model.ContactModel;
+import com.example.android.quakereport.model.EarthquakeModel;
 
 import java.util.ArrayList;
 
@@ -19,15 +19,15 @@ import java.util.ArrayList;
  * Created by indraaguslesmana on 12/21/16.
  */
 
-public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
+public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
 
-    private ContactModel mQuekeData;
+    private EarthquakeModel mQuekeData;
     private TextView mMagnitude, mLocation, mDate;
     private ImageView mImageBackground;
     private TextView mLocation_spesific;
     private TextView mDate_time;
 
-    public EarthquakeAdapter(Context context, ArrayList<ContactModel> quekeData) {
+    public EarthquakeAdapter(Context context, ArrayList<EarthquakeModel> quekeData) {
         super(context, 0, quekeData);
         /**
          * 0 is resource id, why 0 ? becouse we custom the view right here getView()
@@ -52,7 +52,7 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
         mDate_time = (TextView) listItemView.findViewById(R.id.date_time);
         mImageBackground = (ImageView) listItemView.findViewById(R.id.imagebackground);
 
-        String magnitude = mQuekeData.getmMag();
+        double magnitude = mQuekeData.getmMag();
         String placeResult = mQuekeData.getmPlace();
         String time = String.valueOf(mQuekeData.getmTime());
         /**
@@ -76,7 +76,7 @@ public class EarthquakeAdapter extends ArrayAdapter<ContactModel>{
         mDate.setText(Helpers.convertUnixDay(time));
         mDate_time.setText(Helpers.convertUnixTime(time));
 
-        mMagnitude.setText(magnitude);
+        mMagnitude.setText(Helpers.formatMagnitude(magnitude));
 
         /**
          *make change color for diefferent value of magnitude Value

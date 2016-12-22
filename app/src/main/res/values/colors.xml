@@ -22,4 +22,7 @@
 
     <!-- Accent color of the app -->
     <color name="colorAccent">#10CAC9</color>
+
+    <!-- text for location, time, and date-->
+    <color name="colorText_location">#9E9E9E</color>
 </resources>
