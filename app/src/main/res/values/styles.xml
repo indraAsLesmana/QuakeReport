@@ -25,7 +25,7 @@
         <item name="android:textAppearance">?android:textAppearanceSmall</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
         <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:textColor">@color/colorText_location</item>
+        <item name="android:textColor">@color/colorText_time</item>
     </style>
 
     <style name="text_itemstyle_large">

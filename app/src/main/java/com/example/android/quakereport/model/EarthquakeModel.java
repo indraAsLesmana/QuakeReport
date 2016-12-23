@@ -6,14 +6,15 @@ package com.example.android.quakereport.model;
 
 public class EarthquakeModel {
 
-    private String mPlace;
+    private String mPlace, mUrl;
     private double mMag;
     private long mTime;
 
-    public EarthquakeModel(double mMag, String mPlace, long mTime) {
+    public EarthquakeModel(double mMag, String mPlace, long mTime, String mUrl) {
         this.mMag = mMag;
         this.mPlace = mPlace;
         this.mTime = mTime;
+        this.mUrl = mUrl;
     }
 
     public double getmMag() {
@@ -26,5 +27,9 @@ public class EarthquakeModel {
 
     public long getmTime() {
         return mTime;
+    }
+
+    public String getmUrl() {
+        return mUrl;
     }
 }

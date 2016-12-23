@@ -1,7 +1,9 @@
 package com.example.android.quakereport.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +52,14 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
         mLocation = (TextView) listItemView.findViewById(R.id.location);
         mDate = (TextView) listItemView.findViewById(R.id.date);
         mDate_time = (TextView) listItemView.findViewById(R.id.date_time);
-        mImageBackground = (ImageView) listItemView.findViewById(R.id.imagebackground);
 
-        double magnitude = mQuekeData.getmMag();
+        // Set the proper background color on the magnitude circle.
+        // Fetch the background from the TextView, which is a GradientDrawable.
+        mImageBackground = (ImageView) listItemView.findViewById(R.id.imagebackground);
+        GradientDrawable magnitudeCircle = (GradientDrawable) mImageBackground.getBackground();
+        int magnitudeColor = getMagnitudeColor(mQuekeData.getmMag());
+
+        String magnitude = Helpers.formatMagnitude(mQuekeData.getmMag());
         String placeResult = mQuekeData.getmPlace();
         String time = String.valueOf(mQuekeData.getmTime());
         /**
@@ -76,19 +83,53 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
         mDate.setText(Helpers.convertUnixDay(time));
         mDate_time.setText(Helpers.convertUnixTime(time));
 
-        mMagnitude.setText(Helpers.formatMagnitude(magnitude));
+        mMagnitude.setText(magnitude);
 
         /**
          *make change color for diefferent value of magnitude Value
          * */
-        /*float mMagnitudeData = Float.parseFloat(magnitude);
+        magnitudeCircle.setColor(magnitudeColor);
 
-        if (mMagnitudeData <= 6.0){mImageBackground.setImageResource(R.drawable.color_green);
-        } else if (mMagnitudeData <= 6.4){mImageBackground.setImageResource(R.drawable.color_dusty_yellow);
-        } else if (mMagnitudeData <= 7.0){mImageBackground.setImageResource(R.drawable.color_mustard_yellow);
-        } else if (mMagnitudeData <= 9.0 ){mImageBackground.setImageResource(R.drawable.color_red);
-        }
-*/
         return listItemView;
     }
+
+    private int getMagnitudeColor (double magnitudeValue) {
+        int magnitudeFloor = (int) Math.floor(magnitudeValue);
+        int magnitudeColorResourceId;
+        switch (magnitudeFloor){
+            case 0:
+            case 1:
+                magnitudeColorResourceId = R.color.magnitude1;
+                break;
+            case 2:
+                magnitudeColorResourceId = R.color.magnitude2;
+                break;
+            case 3:
+                magnitudeColorResourceId = R.color.magnitude3;
+                break;
+            case 4:
+                magnitudeColorResourceId = R.color.magnitude4;
+                break;
+            case 5:
+                magnitudeColorResourceId = R.color.magnitude5;
+                break;
+            case 6:
+                magnitudeColorResourceId = R.color.magnitude6;
+                break;
+            case 7:
+                magnitudeColorResourceId = R.color.magnitude7;
+                break;
+            case 8:
+                magnitudeColorResourceId = R.color.magnitude8;
+                break;
+            case 9:
+                magnitudeColorResourceId = R.color.magnitude9;
+                break;
+            default:
+                magnitudeColorResourceId = R.color.magnitude10plus;
+                break;
+        }
+        return ContextCompat.getColor(getContext(), magnitudeColorResourceId);
+    }
+
 }

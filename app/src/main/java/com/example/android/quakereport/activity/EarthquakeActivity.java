@@ -15,10 +15,14 @@
  */
 package com.example.android.quakereport.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -53,6 +57,15 @@ public class EarthquakeActivity extends AppCompatActivity {
         earthquakeListView = (ListView) findViewById(R.id.list);
         new GetContact().execute();
 
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                EarthquakeModel dataInThisposition = dataEarthqueake.get(position);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
+                startActivity(intent);
+            }
+        });
+
     }
 
     private class GetContact extends AsyncTask<Void, Void, Void> {
@@ -78,8 +91,9 @@ public class EarthquakeActivity extends AppCompatActivity {
                         double mag = data.getDouble("mag");
                         String place = data.getString("place");
                         long time = data.getLong("time");
+                        String url = data.getString("url");
 
-                        dataEarthqueake.add(new EarthquakeModel(mag, place, time));
+                        dataEarthqueake.add(new EarthquakeModel(mag, place, time, url));
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
