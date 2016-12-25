@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 /**
  * Created by indraaguslesmana on 12/21/16.
@@ -18,6 +19,8 @@ import java.net.URL;
 
 public class HttpHandler {
     private static final String TAG = HttpHandler.class.getSimpleName();
+    private static HttpURLConnection CONN;
+    private static InputStream IN;
 
     public HttpHandler() {
     }
@@ -26,11 +29,13 @@ public class HttpHandler {
         String response = null;
         try {
             URL url = new URL(reqUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
+            CONN = (HttpURLConnection) url.openConnection();
+            CONN.setRequestMethod("GET");
+            CONN.setReadTimeout(10000 /* milliseconds */);
+            CONN.setConnectTimeout(15000 /* milliseconds */);
             // read the response
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            response = convertStreamToString(in);
+            IN = new BufferedInputStream(CONN.getInputStream());
+            response = readFromStream(IN);
         } catch (MalformedURLException e) {
             Log.e(TAG, "MalformedURLException: " + e.getMessage());
         } catch (ProtocolException e) {
@@ -43,6 +48,23 @@ public class HttpHandler {
         return response;
     }
 
+    public static void cleanDisconect () {
+        if (CONN != null){
+            CONN.disconnect();
+        }
+
+        if (IN != null){
+            try {
+                IN.close();
+            } catch (IOException e) {
+                Log.e(TAG, "error close inputstream :" + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * source from artilce internet, ini tam
+     * */
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -63,6 +85,25 @@ public class HttpHandler {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * FROM UDACITY
+     * Convert the {@link InputStream} into a String which contains the
+     * whole JSON response from the server.
+     */
+    private String readFromStream(InputStream inputStream) throws IOException {
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
     }
 
 }

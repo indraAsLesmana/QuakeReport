@@ -36,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity {
@@ -105,7 +106,8 @@ public class EarthquakeActivity extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
                         }
                     });
-
+                }finally {
+                    HttpHandler.cleanDisconect(); // disconnect Http request, and cleanInputStream
                 }
 
             } else {
