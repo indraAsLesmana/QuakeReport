@@ -33,6 +33,7 @@ public class HttpHandler {
             CONN.setRequestMethod("GET");
             CONN.setReadTimeout(10000 /* milliseconds */);
             CONN.setConnectTimeout(15000 /* milliseconds */);
+            CONN.connect();
             // read the response
             IN = new BufferedInputStream(CONN.getInputStream());
             response = readFromStream(IN);
