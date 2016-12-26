@@ -49,6 +49,9 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Asyctask for download on background data
+     * */
     private class EarthqueakeTask extends AsyncTask<String, Void, ArrayList<EarthquakeModel>>{
 
         @Override
