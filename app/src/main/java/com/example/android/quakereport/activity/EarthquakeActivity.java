@@ -15,9 +15,10 @@
  */
 package com.example.android.quakereport.activity;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -29,67 +30,71 @@ import android.widget.Toast;
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.adapter.EarthquakeAdapter;
 import com.example.android.quakereport.helper.Constant;
-import com.example.android.quakereport.helper.Helpers;
-import com.example.android.quakereport.helper.Utils;
+import com.example.android.quakereport.loader.EarthquakeLoader;
 import com.example.android.quakereport.model.EarthquakeModel;
 
 import java.util.ArrayList;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<ArrayList<EarthquakeModel>> {
 
     public static final String TAG = EarthquakeActivity.class.getName();
+    /** Adapter for the list of earthquakes */
+    private EarthquakeAdapter mAdapter;
     private ListView earthquakeListView;
-    private EarthquakeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
-        /**
-         * just one line to excute data ha ha
-         * */
-        new EarthqueakeTask().execute(Constant.MAIN_URL_LESSON3);
+
+        // Get a reference to the LoaderManager, in order to interact with loaders.
+        LoaderManager loaderManager = getLoaderManager();
+
+        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+        // because this activity implements the LoaderCallbacks interface).
+        loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null, this);
 
     }
 
     /**
-     * Asyctask for download on background data
+     * prevent always load asynctask on rotate phone with Loader
      * */
-    private class EarthqueakeTask extends AsyncTask<String, Void, ArrayList<EarthquakeModel>>{
+    @Override
+    public Loader<ArrayList<EarthquakeModel>> onCreateLoader(int i, Bundle bundle) {
 
-        @Override
-        protected ArrayList<EarthquakeModel> doInBackground(String... strings) {
-            ArrayList<EarthquakeModel> dataEarthqueake = null;
-            if (strings.length < 1 || strings[0] != null) {
-                dataEarthqueake = Utils.fetchEarthquakeData(strings[0]);
-            }
+        return new EarthquakeLoader(this, Constant.MAIN_URL_LESSON3);
+    }
 
-            return dataEarthqueake;
-        }
+    @Override
+    public void onLoadFinished(Loader<ArrayList<EarthquakeModel>> loader,
+                               final ArrayList<EarthquakeModel> earthquakeModels) {
 
-        @Override
-        protected void onPostExecute(final ArrayList<EarthquakeModel> dataEarthqueake) {
-            super.onPostExecute(dataEarthqueake);
+        mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakeModels);
 
-            adapter = new EarthquakeAdapter(EarthquakeActivity.this, dataEarthqueake);
+        // Find a reference to the {@link ListView} in the layout
+        earthquakeListView = (ListView) findViewById(R.id.list);
+        earthquakeListView.setAdapter(mAdapter);
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                EarthquakeModel dataInThisposition = earthquakeModels.get(position);
 
-            // Find a reference to the {@link ListView} in the layout
-            earthquakeListView = (ListView) findViewById(R.id.list);
-            earthquakeListView.setAdapter(adapter);
-            earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    EarthquakeModel dataInThisposition = dataEarthqueake.get(position);
-
-                    if (!TextUtils.isEmpty(dataInThisposition.getmUrl())){
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
-                        startActivity(intent);
-                    }else {
-                        Toast.makeText(EarthquakeActivity.this, "URL link paged, not evaluabe", Toast.LENGTH_SHORT).show();
-                    }
+                if (!TextUtils.isEmpty(dataInThisposition.getmUrl())){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(EarthquakeActivity.this, "URL link paged, not evaluabe", Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
+            }
+        });
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<EarthquakeModel>> loader) {
+        mAdapter.clear();
     }
 
 }

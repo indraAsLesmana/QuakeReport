@@ -24,4 +24,8 @@ public class Constant {
     public static final SimpleDateFormat FULL_DATE_FORMAT =
             new SimpleDateFormat("EEEE, dd MMMM yyyy", DEFAULT_LOCALE);
 
+    /**
+     * uniqe ID per activity
+     * */
+    public final static int EARTHQUEAKE_ACTIVITY_ID = 101;
 }
