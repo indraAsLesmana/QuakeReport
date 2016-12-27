@@ -18,10 +18,13 @@ package com.example.android.quakereport.activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -46,6 +49,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private ListView earthquakeListView;
     private TextView mEmpetyView;
     private ProgressBar mProgressBar;
+    boolean isConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,13 @@ public class EarthquakeActivity extends AppCompatActivity implements
          * */
         earthquakeListView = (ListView) findViewById(R.id.list);
         mEmpetyView = (TextView)findViewById(R.id.textEmpety);
+
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(this.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
 
         // Get a reference to the LoaderManager, in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
@@ -87,7 +98,12 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
         //default empety view, if respone return null... without flipper is best Practice
         earthquakeListView.setEmptyView(mEmpetyView);
-        mEmpetyView.setText(getResources().getString(R.string.data_not_found));
+
+        if(isConnected){
+            mEmpetyView.setText(getResources().getString(R.string.data_not_found));
+        }else {
+            mEmpetyView.setText(getResources().getString(R.string.no_internet_connection));
+        }
 
         if (earthquakeModels != null && !earthquakeModels.isEmpty()) {
             mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakeModels);
@@ -112,7 +128,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
     @Override
     public void onLoaderReset(Loader<ArrayList<EarthquakeModel>> loader) {
-        mAdapter.clear();
+        //mAdapter.clear();
     }
 
 }
