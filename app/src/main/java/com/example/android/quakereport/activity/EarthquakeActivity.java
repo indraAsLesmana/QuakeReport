@@ -20,13 +20,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.adapter.EarthquakeAdapter;
 import com.example.android.quakereport.helper.Constant;
+import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.helper.Utils;
 import com.example.android.quakereport.model.EarthquakeModel;
 
@@ -43,9 +46,9 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
         /**
-         * just online to excute data ha ha
+         * just one line to excute data ha ha
          * */
-        new EarthqueakeTask().execute(Constant.MAIN_URL);
+        new EarthqueakeTask().execute(Constant.MAIN_URL_LESSON3);
 
     }
 
@@ -77,8 +80,13 @@ public class EarthquakeActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     EarthquakeModel dataInThisposition = dataEarthqueake.get(position);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
-                    startActivity(intent);
+
+                    if (!TextUtils.isEmpty(dataInThisposition.getmUrl())){
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(EarthquakeActivity.this, "URL link paged, not evaluabe", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
