@@ -49,7 +49,6 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private ListView earthquakeListView;
     private TextView mEmpetyView;
     private ProgressBar mProgressBar;
-    boolean isConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +57,25 @@ public class EarthquakeActivity extends AppCompatActivity implements
         /**
          * initial all view
          * */
-        earthquakeListView = (ListView) findViewById(R.id.list);
         mEmpetyView = (TextView)findViewById(R.id.textEmpety);
+        earthquakeListView = (ListView) findViewById(R.id.list);
+        earthquakeListView.setEmptyView(mEmpetyView);
 
-        ConnectivityManager cm =
-                (ConnectivityManager)this.getSystemService(this.CONNECTIVITY_SERVICE);
+        mAdapter = new EarthquakeAdapter(this, new ArrayList<EarthquakeModel>());
+        earthquakeListView.setAdapter(mAdapter);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int postion, long l) {
+                EarthquakeModel dataOnpostition = mAdapter.getItem(postion);
 
+                if (!dataOnpostition.getmUrl().isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataOnpostition.getmUrl()));
+                    startActivity(intent);
+                }
+
+            }
+        });
 
         // Get a reference to the LoaderManager, in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
@@ -96,39 +105,19 @@ public class EarthquakeActivity extends AppCompatActivity implements
         mProgressBar = (ProgressBar)findViewById(R.id.loading_spinner);
         mProgressBar.setVisibility(View.GONE);
 
-        //default empety view, if respone return null... without flipper is best Practice
-        earthquakeListView.setEmptyView(mEmpetyView);
-
-        if(isConnected){
-            mEmpetyView.setText(getResources().getString(R.string.data_not_found));
-        }else {
-            mEmpetyView.setText(getResources().getString(R.string.no_internet_connection));
-        }
+        mAdapter.clear();
 
         if (earthquakeModels != null && !earthquakeModels.isEmpty()) {
-            mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakeModels);
-
-            // Find a reference to the {@link ListView} in the layout
-            earthquakeListView.setAdapter(mAdapter);
-            earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    EarthquakeModel dataInThisposition = earthquakeModels.get(position);
-
-                    if (!TextUtils.isEmpty(dataInThisposition.getmUrl())) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(EarthquakeActivity.this, "URL link paged, not evaluabe", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            mAdapter.addAll(earthquakeModels);
+//            mAdapter.notifyDataSetChanged();
         }
+
+        mEmpetyView.setText(getResources().getString(R.string.data_not_found));
     }
 
     @Override
     public void onLoaderReset(Loader<ArrayList<EarthquakeModel>> loader) {
-        //mAdapter.clear();
+        mAdapter.clear();
     }
 
 }
