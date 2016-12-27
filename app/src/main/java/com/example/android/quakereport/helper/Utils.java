@@ -47,6 +47,13 @@ public final class Utils {
      * Query the USGS dataset and return an {@link EarthquakeModel} object to represent a single earthquake.
      */
     public static ArrayList<EarthquakeModel> fetchEarthquakeData(String requestUrl) {
+        //make progressbar visible for loading...
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // Create URL object
         URL url = createUrl(requestUrl);
 

@@ -32,6 +32,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
 
         if (!TextUtils.isEmpty(mUrl)){
             dataEarthqueake = Utils.fetchEarthquakeData(mUrl);
+            //dataEarthqueake = null; //testing progress bar, if data return null and change View with setEmpetiView
         }
 
         return dataEarthqueake;

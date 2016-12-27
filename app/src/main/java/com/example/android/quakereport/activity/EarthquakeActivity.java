@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,14 +45,18 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private EarthquakeAdapter mAdapter;
     private ListView earthquakeListView;
     private TextView mEmpetyView;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
+        /**
+         * initial all view
+         * */
         earthquakeListView = (ListView) findViewById(R.id.list);
         mEmpetyView = (TextView)findViewById(R.id.textEmpety);
-        earthquakeListView.setEmptyView(mEmpetyView);
+
         // Get a reference to the LoaderManager, in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
 
@@ -70,13 +75,19 @@ public class EarthquakeActivity extends AppCompatActivity implements
      * */
     @Override
     public Loader<ArrayList<EarthquakeModel>> onCreateLoader(int i, Bundle bundle) {
-
         return new EarthquakeLoader(this, Constant.MAIN_URL_LESSON3);
     }
 
     @Override
     public void onLoadFinished(Loader<ArrayList<EarthquakeModel>> loader,
                                final ArrayList<EarthquakeModel> earthquakeModels) {
+
+        mProgressBar = (ProgressBar)findViewById(R.id.loading_spinner);
+        mProgressBar.setVisibility(View.GONE);
+
+        //default empety view, if respone return null... without flipper is best Practice
+        earthquakeListView.setEmptyView(mEmpetyView);
+        mEmpetyView.setText(getResources().getString(R.string.data_not_found));
 
         if (earthquakeModels != null && !earthquakeModels.isEmpty()) {
             mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakeModels);
