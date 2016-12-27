@@ -56,6 +56,9 @@ public class EarthquakeActivity extends AppCompatActivity implements
         // because this activity implements the LoaderCallbacks interface).
         loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null, this);
 
+        //try inline code, work perfectly
+//        getLoaderManager().initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,this);
+
     }
 
     /**
