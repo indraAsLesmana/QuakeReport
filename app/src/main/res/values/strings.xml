@@ -15,4 +15,5 @@
 <resources>
     <string name="app_name">Quake Report</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="data_not_found">Data not found!</string>
 </resources>

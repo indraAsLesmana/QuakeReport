@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.quakereport.R;
@@ -42,12 +43,15 @@ public class EarthquakeActivity extends AppCompatActivity implements
     /** Adapter for the list of earthquakes */
     private EarthquakeAdapter mAdapter;
     private ListView earthquakeListView;
+    private TextView mEmpetyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
-
+        earthquakeListView = (ListView) findViewById(R.id.list);
+        mEmpetyView = (TextView)findViewById(R.id.textEmpety);
+        earthquakeListView.setEmptyView(mEmpetyView);
         // Get a reference to the LoaderManager, in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
 
@@ -74,25 +78,25 @@ public class EarthquakeActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<ArrayList<EarthquakeModel>> loader,
                                final ArrayList<EarthquakeModel> earthquakeModels) {
 
-        mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakeModels);
+        if (earthquakeModels != null && !earthquakeModels.isEmpty()) {
+            mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakeModels);
 
-        // Find a reference to the {@link ListView} in the layout
-        earthquakeListView = (ListView) findViewById(R.id.list);
-        earthquakeListView.setAdapter(mAdapter);
-        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                EarthquakeModel dataInThisposition = earthquakeModels.get(position);
+            // Find a reference to the {@link ListView} in the layout
+            earthquakeListView.setAdapter(mAdapter);
+            earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    EarthquakeModel dataInThisposition = earthquakeModels.get(position);
 
-                if (!TextUtils.isEmpty(dataInThisposition.getmUrl())){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
-                    startActivity(intent);
-                }else {
-                    Toast.makeText(EarthquakeActivity.this, "URL link paged, not evaluabe", Toast.LENGTH_SHORT).show();
+                    if (!TextUtils.isEmpty(dataInThisposition.getmUrl())) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataInThisposition.getmUrl()));
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(EarthquakeActivity.this, "URL link paged, not evaluabe", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
-
+            });
+        }
     }
 
     @Override
