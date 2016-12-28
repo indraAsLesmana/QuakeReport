@@ -113,12 +113,17 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 getString(R.string.settings_min_dataview_key),
                 getString(R.string.settings_min_data_view_default));
 
+        String orderBy = sharedPrefs.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default)
+        );
+
         Uri baseUri = Uri.parse(Constant.MAIN_URL_DINAMIC);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         uriBuilder.appendQueryParameter("format", "geojson");
         uriBuilder.appendQueryParameter("eventtype", "earthquake");
-        uriBuilder.appendQueryParameter("orderby", "time");
+        uriBuilder.appendQueryParameter("orderby", orderBy);
         uriBuilder.appendQueryParameter("minmag", minMagnitude);
         uriBuilder.appendQueryParameter("limit", minVieweddata);
 
