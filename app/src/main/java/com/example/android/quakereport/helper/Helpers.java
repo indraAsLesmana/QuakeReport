@@ -1,5 +1,9 @@
 package com.example.android.quakereport.helper;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import org.joda.time.DateTime;
 
 import java.text.DecimalFormat;
@@ -14,7 +18,7 @@ public class Helpers {
 
     /**
      * THis helper convert UnixTimeStamp
-     * */
+     */
     public static String convertUnixDay(String longtime) {
         long unixSeconds = Long.parseLong(longtime);
         Date date = new Date(unixSeconds * 1000L); // *1000 is to convert seconds to milliseconds
@@ -31,7 +35,7 @@ public class Helpers {
         return formattedDate;
     }
 
-    public static DateTime convertUnixTimeJoda (long longtime){
+    public static DateTime convertUnixTimeJoda(long longtime) {
         DateTime _startDate = new DateTime(longtime * 1000L);
 //        String formattedDate = Constant.DATE_FORMAT_MMM_DD_YYYY.format(_startDate);
         return _startDate;
@@ -44,6 +48,18 @@ public class Helpers {
     public static String formatMagnitude(double magnitude) {
         DecimalFormat magnitudeFormat = new DecimalFormat("0.0");
         return magnitudeFormat.format(magnitude);
+    }
+
+    /**
+     * cheking netWork connectivity
+     */
+    public static boolean checkingNeworkStatus(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
 }
