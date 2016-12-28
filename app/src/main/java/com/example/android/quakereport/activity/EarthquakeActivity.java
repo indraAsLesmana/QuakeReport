@@ -18,8 +18,10 @@ package com.example.android.quakereport.activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -101,7 +103,28 @@ public class EarthquakeActivity extends AppCompatActivity implements
      * */
     @Override
     public Loader<ArrayList<EarthquakeModel>> onCreateLoader(int i, Bundle bundle) {
-        return new EarthquakeLoader(this, Constant.MAIN_URL_LESSON3);
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String minMagnitude = sharedPrefs.getString(
+                getString(R.string.settings_min_magnitude_key),
+                getString(R.string.settings_min_magnitude_default));
+
+        String minVieweddata = sharedPrefs.getString(
+                getString(R.string.settings_min_dataview_key),
+                getString(R.string.settings_min_data_view_default));
+
+        Uri baseUri = Uri.parse(Constant.MAIN_URL_DINAMIC);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("format", "geojson");
+        uriBuilder.appendQueryParameter("eventtype", "earthquake");
+        uriBuilder.appendQueryParameter("orderby", "time");
+        uriBuilder.appendQueryParameter("minmag", minMagnitude);
+        uriBuilder.appendQueryParameter("limit", minVieweddata);
+
+        Log.i(TAG, uriBuilder.toString());
+        return new EarthquakeLoader(this, uriBuilder.toString());
+
     }
 
     @Override

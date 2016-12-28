@@ -14,6 +14,10 @@ public class Constant {
     public static final String MAIN_URL_LESSON3 =
             "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
+    public static final String MAIN_URL_DINAMIC =
+            "http://earthquake.usgs.gov/fdsnws/event/1/query";
+
+
     public static final Locale DEFAULT_LOCALE = new Locale("en", "US");
     public static final SimpleDateFormat DATE_FORMAT_MMM_DD_YY =
             new SimpleDateFormat("LLL dd, yyyy", DEFAULT_LOCALE);
