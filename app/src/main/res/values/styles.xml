@@ -19,6 +19,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionButtonStyle">@style/actionButtonStyle</item>
+    </style>
+
+    <style name="actionButtonStyle" parent="AppTheme">
+        <item name="android:minWidth">68dp</item>
+        <item name="android:padding">0dp</item>
     </style>
 
     <style name="text_itemstyle_medium">

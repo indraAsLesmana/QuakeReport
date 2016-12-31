@@ -48,11 +48,11 @@ public final class Utils {
      */
     public static ArrayList<EarthquakeModel> fetchEarthquakeData(String requestUrl) {
         //make progressbar visible for loading...
-        try {
+        /*try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
 
         // Create URL object
         URL url = createUrl(requestUrl);
