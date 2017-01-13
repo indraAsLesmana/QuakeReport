@@ -1,39 +1,35 @@
 package com.example.android.quakereport.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.model.EarthquakeModel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by indraaguslesmana on 12/21/16.
  */
 
-public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
+public class EarthquakeAdapter extends
+        RecyclerView.Adapter<EarthquakeAdapter.EarthquakeAdapterViewHolder>{
 
-    private EarthquakeModel mQuekeData;
-    private TextView mMagnitude, mLocation, mDate;
-    private ImageView mImageBackground;
-    private TextView mLocation_spesific;
-    private TextView mDate_time;
+    private Context mContext;
+    private List<EarthquakeModel> mQuakeData;
 
-    public EarthquakeAdapter(Context context, ArrayList<EarthquakeModel> quekeData) {
+
+    /*public EarthquakeAdapter(Context context, ArrayList<EarthquakeModel> quekeData) {
         super(context, 0, quekeData);
-        /**
+        *//**
          * 0 is resource id, why 0 ? becouse we custom the view right here getView()
-         * */
+         * *//*
     }
 
     @NonNull
@@ -62,9 +58,9 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
         String magnitude = Helpers.formatMagnitude(mQuekeData.getmMag());
         String placeResult = mQuekeData.getmPlace();
         String time = String.valueOf(mQuekeData.getmTime());
-        /**
+        *//**
          * @param placeResult check is contain of or not.
-         * */
+         * *//*
         if (placeResult.contains("of ")){
             String splitResult [] = placeResult.split("of ", 2);
             mLocation_spesific.setText(splitResult[0] + "of");
@@ -74,9 +70,9 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
             mLocation.setText(placeResult);
         }
 
-        /**
+        *//**
          * fix UnixTimeStamp Respone Value to long
-         * */
+         * *//*
         if (time.length() >= 10){
             time = time.substring(0, 10);
         }
@@ -85,12 +81,20 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
 
         mMagnitude.setText(magnitude);
 
-        /**
+        */
+
+
+
+    /**
          *make change color for diefferent value of magnitude Value
-         * */
+         * *//*
         magnitudeCircle.setColor(magnitudeColor);
 
         return listItemView;
+    }*/
+
+    public EarthquakeAdapter(Context context) {
+        mContext = context;
     }
 
     private int getMagnitudeColor (double magnitudeValue) {
@@ -129,7 +133,69 @@ public class EarthquakeAdapter extends ArrayAdapter<EarthquakeModel>{
                 magnitudeColorResourceId = R.color.magnitude10plus;
                 break;
         }
-        return ContextCompat.getColor(getContext(), magnitudeColorResourceId);
+        return ContextCompat.getColor(mContext, magnitudeColorResourceId);
     }
 
+
+    @Override
+    public EarthquakeAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        int layoutIdForlistItem = R.layout.list_item;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        boolean shouldAttachToParentImmedietely = false;
+        View view = inflater.inflate(layoutIdForlistItem, parent, shouldAttachToParentImmedietely);
+        return new EarthquakeAdapterViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(EarthquakeAdapterViewHolder holder, int position) {
+        EarthquakeModel earthquakeModel = mQuakeData.get(position);
+
+        String magnitude = Helpers.formatMagnitude(earthquakeModel.getmMag());
+        String placeResult = earthquakeModel.getmPlace();
+        String time = String.valueOf(earthquakeModel.getmTime());
+
+        if (placeResult.contains("of ")){
+            String splitResult [] = placeResult.split("of ", 2);
+            holder.mLocationSpesific.setText(splitResult[0] + "of");
+            holder.mLocationSpesific.setText(splitResult[1]);
+        }else {
+            holder.mLocationSpesific.setText("--");
+            holder.mLocationSpesific.setText(placeResult);
+        }
+
+        holder.mMagnitude.setText(magnitude);
+        holder.mPlace.setText(earthquakeModel.getmPlace());
+
+        if (time.length() >= 10){
+            time = time.substring(0, 10);
+        }
+
+        holder.mDate.setText(Helpers.convertUnixDay(time));
+        holder.mDate_time.setText(Helpers.convertUnixTime(time));
+    }
+
+    @Override
+    public int getItemCount() {
+        return mQuakeData.size();
+    }
+
+    public class EarthquakeAdapterViewHolder extends RecyclerView.ViewHolder{
+
+        TextView mMagnitude, mDate, mDate_time, mPlace, mLocationSpesific;
+
+        public EarthquakeAdapterViewHolder(View itemView) {
+            super(itemView);
+            mMagnitude = (TextView) itemView.findViewById(R.id.magnitude);
+            mDate = (TextView) itemView.findViewById(R.id.date);
+            mDate_time = (TextView) itemView.findViewById(R.id.date_time);
+            mPlace = (TextView) itemView.findViewById(R.id.location);
+            mLocationSpesific = (TextView) itemView.findViewById(R.id.location_spesific);
+        }
+    }
+
+    public void setEarthquake(List<EarthquakeModel> quekeData){
+        mQuakeData = quekeData;
+        notifyDataSetChanged();
+    }
 }

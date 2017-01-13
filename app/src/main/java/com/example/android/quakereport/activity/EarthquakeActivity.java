@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +48,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
     public static final String TAG = EarthquakeActivity.class.getName();
     /** Adapter for the list of earthquakes */
     private EarthquakeAdapter mAdapter;
-    private ListView earthquakeListView;
+    private RecyclerView earthquakeListView;
     private TextView mEmpetyView;
     private ProgressBar mProgressBar;
 
@@ -60,13 +61,14 @@ public class EarthquakeActivity extends AppCompatActivity implements
          * */
         mProgressBar = (ProgressBar)findViewById(R.id.loading_spinner);
         mEmpetyView = (TextView)findViewById(R.id.textEmpety);
-        earthquakeListView = (ListView) findViewById(R.id.list);
+        earthquakeListView = (RecyclerView) findViewById(R.id.list);
         earthquakeListView.setEmptyView(mEmpetyView);
 
         mAdapter = new EarthquakeAdapter(this, new ArrayList<EarthquakeModel>());
         earthquakeListView.setAdapter(mAdapter);
 
-        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // TODO : must change with interface listener
+        /*earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int postion, long l) {
                 EarthquakeModel dataOnpostition = mAdapter.getItem(postion);
@@ -77,7 +79,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 }
 
             }
-        });
+        });*/
 
         if (Helpers.checkingNeworkStatus(this)){
             // Get a reference to the LoaderManager, in order to interact with loaders.
