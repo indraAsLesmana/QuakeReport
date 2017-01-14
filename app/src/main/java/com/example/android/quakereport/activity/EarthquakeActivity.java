@@ -190,7 +190,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
     @Override
     public void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition) {
-        Toast.makeText(this, weatherForDay.getmUrl() + "position: "+ adapterPosisition,
+        Toast.makeText(EarthquakeActivity.this, weatherForDay.getmUrl() + "position: "+ adapterPosisition,
                 Toast.LENGTH_SHORT).show();
     }
 

@@ -66,10 +66,6 @@ public class EarthquakeAdapter extends
     private List<EarthquakeModel> mQuakeData;
     final private EarthquakeAdapterOnClickHandler mClickHandler;
 
-    public interface EarthquakeAdapterOnClickHandler {
-        void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition);
-    }
-
     public EarthquakeAdapter(Context context, EarthquakeAdapterOnClickHandler onClick) {
         mContext = context;
         mClickHandler = onClick;
@@ -139,6 +135,7 @@ public class EarthquakeAdapter extends
             mDate_time = (TextView) itemView.findViewById(R.id.date_time);
             mPlace = (TextView) itemView.findViewById(R.id.location);
             mLocationSpesific = (TextView) itemView.findViewById(R.id.location_spesific);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -154,5 +151,8 @@ public class EarthquakeAdapter extends
         notifyDataSetChanged();
     }
 
+    public interface EarthquakeAdapterOnClickHandler {
+        void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition);
+    }
 
 }
