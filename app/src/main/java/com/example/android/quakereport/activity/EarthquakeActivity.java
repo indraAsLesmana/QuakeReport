@@ -143,8 +143,6 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        Log.i(TAG, String.valueOf(earthquakeModels.size()));
-
         if (earthquakeModels != null && !earthquakeModels.isEmpty()) {
             mAdapter.setEarthquake(earthquakeModels);
             mRecycleview.setAdapter(mAdapter);

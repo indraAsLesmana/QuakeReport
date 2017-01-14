@@ -21,8 +21,8 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
     private static final String TAG = EarthquakeLoader.class.getSimpleName();
 
     private String mUrl;
-    private ArrayList<EarthquakeModel> dataEartchquake = null;
-    private static ArrayList<EarthquakeModel> dataEartchquakeCache;
+    private static String lastUrl = null;
+    private static ArrayList<EarthquakeModel> dataEartchquake;
     private ProgressBar mProgresbar;
 
     public EarthquakeLoader(Context context, String stringUrl, ProgressBar progressBar) {
@@ -38,30 +38,30 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
 
     @Override
     protected void onStartLoading() {
-        
-        if (dataEartchquake != null){
-            if (dataEartchquakeCache.equals(dataEartchquake)){
-                deliverResult(dataEartchquakeCache);
-                makeLogInfo("Load with last result");
-            }
-            deliverResult(dataEartchquake);
-            makeLogInfo("Load with Cache");
 
-        }else {
-            mProgresbar.setVisibility(View.VISIBLE);
-            forceLoad();
+        if (lastUrl != null) {
+            if (dataEartchquake != null &&
+                    mUrl.trim().equals(lastUrl.trim())) {
+                deliverResult(dataEartchquake);
+                makeLogInfo("Load with Cache");
+                return;
+            }
         }
+
+        mProgresbar.setVisibility(View.VISIBLE);
+        lastUrl = mUrl.trim();
+        forceLoad();
+
     }
 
     @Override
     public ArrayList<EarthquakeModel> loadInBackground() {
-        ArrayList<EarthquakeModel> dataEarthqueake = null;
 
-        if (!TextUtils.isEmpty(mUrl)){
-            dataEarthqueake = Utils.fetchEarthquakeData(mUrl);
+        if (!TextUtils.isEmpty(mUrl)) {
+            makeLogInfo("Network Load");
+            dataEartchquake = Utils.fetchEarthquakeData(mUrl);
         }
-        dataEartchquakeCache = dataEarthqueake;
-        return dataEarthqueake;
+        return dataEartchquake;
     }
 
     @Override
