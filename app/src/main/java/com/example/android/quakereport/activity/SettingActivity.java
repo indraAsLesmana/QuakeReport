@@ -1,17 +1,14 @@
 package com.example.android.quakereport.activity;
 
 import android.content.SharedPreferences;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.example.android.quakereport.R;
-
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -21,20 +18,22 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
     }
 
-    public static class EarthquakePreferenceFragment extends PreferenceFragment implements
-            Preference.OnPreferenceChangeListener{
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.setting_main);
+    public static class EarthquakePreferenceFragment extends PreferenceFragmentCompat
+            implements Preference.OnPreferenceChangeListener{
 
-            Preference minMagnitude = findPreference(getString(R.string.settings_min_magnitude_key));
+        @Override
+        public void onCreatePreferences(Bundle bundle, String s) {
+            addPreferencesFromResource(R.xml.setting_main);
+            Preference minMagnitude = findPreference(
+                    getString(R.string.settings_min_magnitude_key));
             bindPreferenceSummaryToValue(minMagnitude);
 
-            Preference minVieweddata = findPreference(getString(R.string.settings_min_dataview_key));
+            Preference minVieweddata = findPreference(
+                    getString(R.string.settings_min_dataview_key));
             bindPreferenceSummaryToValue(minVieweddata);
 
-            Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
+            Preference orderBy = findPreference(
+                    getString(R.string.settings_order_by_key));
             bindPreferenceSummaryToValue(orderBy);
         }
 
