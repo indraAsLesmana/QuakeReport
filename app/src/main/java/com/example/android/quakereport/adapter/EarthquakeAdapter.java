@@ -23,87 +23,6 @@ import java.util.List;
 public class EarthquakeAdapter extends
         RecyclerView.Adapter<EarthquakeAdapter.EarthquakeAdapterViewHolder>{
 
-    private Context mContext;
-    private List<EarthquakeModel> mQuakeData;
-    final private EarthquakeAdapterOnClickHandler mClickHandler;
-
-    public interface EarthquakeAdapterOnClickHandler {
-        void onClickItem(EarthquakeModel weatherForDay);
-    }
-
-    /*public EarthquakeAdapter(Context context, ArrayList<EarthquakeModel> quekeData) {
-        super(context, 0, quekeData);
-        *//**
-         * 0 is resource id, why 0 ? becouse we custom the view right here getView()
-         * *//*
-    }
-
-    @NonNull
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View listItemView = convertView;
-        if(listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.list_item, parent, false);
-        }
-        mQuekeData = getItem(position);
-
-        mMagnitude = (TextView) listItemView.findViewById(R.id.magnitude);
-        mLocation_spesific = (TextView) listItemView.findViewById(R.id.location_spesific);
-        mLocation = (TextView) listItemView.findViewById(R.id.location);
-        mDate = (TextView) listItemView.findViewById(R.id.date);
-        mDate_time = (TextView) listItemView.findViewById(R.id.date_time);
-
-        // Set the proper background color on the magnitude circle.
-        // Fetch the background from the TextView, which is a GradientDrawable.
-        mImageBackground = (ImageView) listItemView.findViewById(R.id.imagebackground);
-        GradientDrawable magnitudeCircle = (GradientDrawable) mImageBackground.getBackground();
-        int magnitudeColor = getMagnitudeColor(mQuekeData.getmMag());
-
-        String magnitude = Helpers.formatMagnitude(mQuekeData.getmMag());
-        String placeResult = mQuekeData.getmPlace();
-        String time = String.valueOf(mQuekeData.getmTime());
-        *//**
-         * @param placeResult check is contain of or not.
-         * *//*
-        if (placeResult.contains("of ")){
-            String splitResult [] = placeResult.split("of ", 2);
-            mLocation_spesific.setText(splitResult[0] + "of");
-            mLocation.setText(splitResult[1]);
-        }else {
-            mLocation_spesific.setText("--");
-            mLocation.setText(placeResult);
-        }
-
-        *//**
-         * fix UnixTimeStamp Respone Value to long
-         * *//*
-        if (time.length() >= 10){
-            time = time.substring(0, 10);
-        }
-        mDate.setText(Helpers.convertUnixDay(time));
-        mDate_time.setText(Helpers.convertUnixTime(time));
-
-        mMagnitude.setText(magnitude);
-
-        */
-
-
-
-    /**
-         *make change color for diefferent value of magnitude Value
-         * *//*
-        magnitudeCircle.setColor(magnitudeColor);
-
-        return listItemView;
-    }*/
-
-    public EarthquakeAdapter(Context context, EarthquakeAdapterOnClickHandler onClick) {
-        mContext = context;
-        mClickHandler = onClick;
-    }
-
     private int getMagnitudeColor (double magnitudeValue) {
         int magnitudeFloor = (int) Math.floor(magnitudeValue);
         int magnitudeColorResourceId;
@@ -143,6 +62,18 @@ public class EarthquakeAdapter extends
         return ContextCompat.getColor(mContext, magnitudeColorResourceId);
     }
 
+    private Context mContext;
+    private List<EarthquakeModel> mQuakeData;
+    final private EarthquakeAdapterOnClickHandler mClickHandler;
+
+    public interface EarthquakeAdapterOnClickHandler {
+        void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition);
+    }
+
+    public EarthquakeAdapter(Context context, EarthquakeAdapterOnClickHandler onClick) {
+        mContext = context;
+        mClickHandler = onClick;
+    }
 
     @Override
     public EarthquakeAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -214,7 +145,7 @@ public class EarthquakeAdapter extends
         public void onClick(View v) {
             int adapterPosisition = getAdapterPosition();
             EarthquakeModel itemOnlick = mQuakeData.get(adapterPosisition);
-            mClickHandler.onClickItem(itemOnlick);
+            mClickHandler.onClickItem(itemOnlick, adapterPosisition);
         }
     }
 

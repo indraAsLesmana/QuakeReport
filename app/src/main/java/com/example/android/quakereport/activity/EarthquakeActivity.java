@@ -23,15 +23,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.adapter.EarthquakeAdapter;
@@ -43,12 +43,14 @@ import com.example.android.quakereport.model.EarthquakeModel;
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<ArrayList<EarthquakeModel>> {
+        LoaderManager.LoaderCallbacks<ArrayList<EarthquakeModel>>,
+        EarthquakeAdapter.EarthquakeAdapterOnClickHandler,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 
     public static final String TAG = EarthquakeActivity.class.getName();
     /** Adapter for the list of earthquakes */
     private EarthquakeAdapter mAdapter;
-    private RecyclerView earthquakeListView;
+    private RecyclerView mRecycleview;
     private TextView mEmpetyView;
     private ProgressBar mProgressBar;
 
@@ -61,25 +63,21 @@ public class EarthquakeActivity extends AppCompatActivity implements
          * */
         mProgressBar = (ProgressBar)findViewById(R.id.loading_spinner);
         mEmpetyView = (TextView)findViewById(R.id.textEmpety);
-        earthquakeListView = (RecyclerView) findViewById(R.id.list);
-        earthquakeListView.setEmptyView(mEmpetyView);
+        mRecycleview = (RecyclerView) findViewById(R.id.list);
 
-        mAdapter = new EarthquakeAdapter(this, new ArrayList<EarthquakeModel>());
-        earthquakeListView.setAdapter(mAdapter);
+        /*
+         *  This value should be true if you want to reverse your layout. Generally, this is only
+         *  true with horizontal lists that need to support a right-to-left layout.
+         */
+        boolean shouldReverseLayout = false;
 
-        // TODO : must change with interface listener
-        /*earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int postion, long l) {
-                EarthquakeModel dataOnpostition = mAdapter.getItem(postion);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(EarthquakeActivity.this,
+                LinearLayoutManager.VERTICAL,
+                shouldReverseLayout);
 
-                if (!dataOnpostition.getmUrl().isEmpty()){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataOnpostition.getmUrl()));
-                    startActivity(intent);
-                }
-
-            }
-        });*/
+        mRecycleview.setLayoutManager(layoutManager);
+        mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, this);
 
         if (Helpers.checkingNeworkStatus(this)){
             // Get a reference to the LoaderManager, in order to interact with loaders.
@@ -97,6 +95,8 @@ public class EarthquakeActivity extends AppCompatActivity implements
             mEmpetyView.setText(getResources().getString(R.string.no_internet_connection));
         }
 
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
@@ -129,7 +129,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
         uriBuilder.appendQueryParameter("limit", minVieweddata);
 
         Log.i(TAG, uriBuilder.toString());
-        return new EarthquakeLoader(this, uriBuilder.toString());
+        return new EarthquakeLoader(this, uriBuilder.toString(), mProgressBar);
 
     }
 
@@ -139,11 +139,12 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
         mProgressBar.setVisibility(View.GONE);
 
-        mAdapter.clear();
+        Log.i(TAG, String.valueOf(earthquakeModels.size()));
 
         if (earthquakeModels != null && !earthquakeModels.isEmpty()) {
-            mAdapter.addAll(earthquakeModels);
-//            mAdapter.notifyDataSetChanged();
+            mAdapter.setEarthquake(earthquakeModels);
+            mRecycleview.setAdapter(mAdapter);
+            return;
         }
 
         mEmpetyView.setText(getResources().getString(R.string.data_not_found));
@@ -151,7 +152,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
     @Override
     public void onLoaderReset(Loader<ArrayList<EarthquakeModel>> loader) {
-        mAdapter.clear();
+        mAdapter.setEarthquake(null);
     }
 
     @Override
@@ -168,5 +169,27 @@ public class EarthquakeActivity extends AppCompatActivity implements
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition) {
+        Toast.makeText(this, weatherForDay.getmUrl() + "position: "+ adapterPosisition,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.settings_min_dataview_key))||
+                key.equals(getString(R.string.settings_min_magnitude_key))||
+                key.equals(getString(R.string.settings_order_by_key))){
+            getLoaderManager().restartLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null, this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }
