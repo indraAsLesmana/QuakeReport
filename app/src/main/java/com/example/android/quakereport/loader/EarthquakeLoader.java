@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 
+import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.helper.Utils;
 import com.example.android.quakereport.model.EarthquakeModel;
 
@@ -31,18 +32,13 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
         mProgresbar = progressBar;
     }
 
-    public EarthquakeLoader(Context context, String stringUrl) {
-        super(context);
-        mUrl = stringUrl;
-    }
-
     @Override
     protected void onStartLoading() {
         if (lastUrl != null) {
             if (dataEartchquake != null &&
                     mUrl.trim().equals(lastUrl.trim())) {
                 deliverResult(dataEartchquake);
-                makeLogInfo("Load with Cache");
+                Helpers.makeLogInfo(TAG,"Load with Cache");
                 return;
             }
         }
@@ -54,7 +50,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
     @Override
     public ArrayList<EarthquakeModel> loadInBackground() {
         if (!TextUtils.isEmpty(mUrl)) {
-            makeLogInfo("Network Load");
+            Helpers.makeLogInfo(TAG,"Network Load");
             dataEartchquake = Utils.fetchEarthquakeData(mUrl);
         }
         return dataEartchquake;
@@ -64,9 +60,5 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
     public void deliverResult(ArrayList<EarthquakeModel> data) {
         dataEartchquake = data;
         super.deliverResult(data);
-    }
-
-    private void makeLogInfo (String message){
-        Log.i(TAG, message);
     }
 }

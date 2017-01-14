@@ -40,6 +40,8 @@ import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.loader.EarthquakeLoader;
 import com.example.android.quakereport.model.EarthquakeModel;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity implements
@@ -133,6 +135,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
         uriBuilder.appendQueryParameter("limit", minVieweddata);
 
         Log.i(TAG, uriBuilder.toString());
+        mRecycleview.setVisibility(View.INVISIBLE);
         return new EarthquakeLoader(this, uriBuilder.toString(), mProgressBar);
 
     }
@@ -142,6 +145,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
                                final ArrayList<EarthquakeModel> earthquakeModels) {
 
         mProgressBar.setVisibility(View.INVISIBLE);
+        mRecycleview.setVisibility(View.VISIBLE);
 
         if (earthquakeModels != null && !earthquakeModels.isEmpty()) {
             mAdapter.setEarthquake(earthquakeModels);
@@ -190,8 +194,10 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
     @Override
     public void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition) {
-        Toast.makeText(EarthquakeActivity.this, weatherForDay.getmUrl() + "position: "+ adapterPosisition,
-                Toast.LENGTH_SHORT).show();
+        if (weatherForDay.getmUrl().isEmpty()){
+            return;
+        }
+        openWebPage(weatherForDay.getmUrl());
     }
 
     @Override
@@ -200,6 +206,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 key.equals(getString(R.string.settings_min_magnitude_key))||
                 key.equals(getString(R.string.settings_order_by_key))){
             getLoaderManager().restartLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null, this);
+            Helpers.makeLogInfo(TAG, "Shared Preferences Changes!");
         }
     }
 
@@ -220,6 +227,14 @@ public class EarthquakeActivity extends AppCompatActivity implements
                     getString(R.string.settings_order_by_key),
                     getString(R.string.settings_order_by_default)
             ).apply();
+        }
+    }
+
+    public void openWebPage(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
         }
     }
 }

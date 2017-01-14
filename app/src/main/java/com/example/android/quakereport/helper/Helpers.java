@@ -3,6 +3,7 @@ package com.example.android.quakereport.helper;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import org.joda.time.DateTime;
 
@@ -62,4 +63,7 @@ public class Helpers {
         return isConnected;
     }
 
+    public static void makeLogInfo(String tag, String message) {
+            Log.i(tag, message);
+    }
 }
