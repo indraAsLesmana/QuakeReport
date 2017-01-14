@@ -13,15 +13,20 @@
         />
 
     <item
+        android:id="@+id/action_sort"
+        android:orderInCategory="1"
+        android:title="@string/short_result" />
+
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_more_vert_white_24dp"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:title="@string/settings_menu_item"
         app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/action_about"
-        android:orderInCategory="1"
+        android:orderInCategory="3"
         android:title="@string/about_apps" />
 
 </menu>

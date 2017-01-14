@@ -53,6 +53,8 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private RecyclerView mRecycleview;
     private TextView mEmpetyView;
     private ProgressBar mProgressBar;
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +97,10 @@ public class EarthquakeActivity extends AppCompatActivity implements
             mEmpetyView.setText(getResources().getString(R.string.no_internet_connection));
         }
 
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
+        sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(EarthquakeActivity.this);
+        sharedPreferences.
+                registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
@@ -137,7 +141,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<ArrayList<EarthquakeModel>> loader,
                                final ArrayList<EarthquakeModel> earthquakeModels) {
 
-        mProgressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         Log.i(TAG, String.valueOf(earthquakeModels.size()));
 
@@ -164,9 +168,24 @@ public class EarthquakeActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings){
-            Intent intent = new Intent(this, SettingActivity.class);
-            startActivity(intent);
+        switch (id){
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_sort:
+
+                String result = sharedPreferences.getString(
+                        getString(R.string.settings_order_by_key),
+                        getString(R.string.settings_order_by_default));
+
+                if (result.matches(getString(R.string.settings_order_by_magnitude_value))){
+                    setItByTime(true);
+                }else {
+                    setItByTime(false);
+                }
+
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -189,7 +208,20 @@ public class EarthquakeActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    private void setItByTime (boolean bool) {
+        if (bool){
+            sharedPreferences.edit().putString(
+                    getString(R.string.settings_order_by_key),
+                    getString(R.string.settings_order_by_most_recent_value)
+            ).apply();
+        }else {
+            sharedPreferences.edit().putString(
+                    getString(R.string.settings_order_by_key),
+                    getString(R.string.settings_order_by_default)
+            ).apply();
+        }
     }
 }

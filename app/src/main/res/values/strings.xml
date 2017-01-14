@@ -48,5 +48,6 @@
     <string name="sort_by">Sort By</string>
     <string name="data_setting">Data Setting</string>
     <string name="about_apps">About</string>
+    <string name="short_result">Short</string>
 
 </resources>

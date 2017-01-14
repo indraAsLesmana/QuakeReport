@@ -3,6 +3,7 @@ package com.example.android.quakereport.loader;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
  */
 
 public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>> {
+    private static final String TAG = EarthquakeLoader.class.getSimpleName();
+
     private String mUrl;
     private ArrayList<EarthquakeModel> dataEartchquake = null;
     private static ArrayList<EarthquakeModel> dataEartchquakeCache;
@@ -35,12 +38,15 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
 
     @Override
     protected void onStartLoading() {
-
+        
         if (dataEartchquake != null){
             if (dataEartchquakeCache.equals(dataEartchquake)){
                 deliverResult(dataEartchquakeCache);
+                makeLogInfo("Load with last result");
             }
             deliverResult(dataEartchquake);
+            makeLogInfo("Load with Cache");
+
         }else {
             mProgresbar.setVisibility(View.VISIBLE);
             forceLoad();
@@ -62,5 +68,9 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
     public void deliverResult(ArrayList<EarthquakeModel> data) {
         dataEartchquake = data;
         super.deliverResult(data);
+    }
+
+    private void makeLogInfo (String message){
+        Log.i(TAG, message);
     }
 }
