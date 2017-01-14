@@ -1,11 +1,13 @@
 package com.example.android.quakereport.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.quakereport.R;
@@ -23,7 +25,11 @@ public class EarthquakeAdapter extends
 
     private Context mContext;
     private List<EarthquakeModel> mQuakeData;
+    final private EarthquakeAdapterOnClickHandler mClickHandler;
 
+    public interface EarthquakeAdapterOnClickHandler {
+        void onClickItem(EarthquakeModel weatherForDay);
+    }
 
     /*public EarthquakeAdapter(Context context, ArrayList<EarthquakeModel> quekeData) {
         super(context, 0, quekeData);
@@ -93,8 +99,9 @@ public class EarthquakeAdapter extends
         return listItemView;
     }*/
 
-    public EarthquakeAdapter(Context context) {
+    public EarthquakeAdapter(Context context, EarthquakeAdapterOnClickHandler onClick) {
         mContext = context;
+        mClickHandler = onClick;
     }
 
     private int getMagnitudeColor (double magnitudeValue) {
@@ -149,12 +156,16 @@ public class EarthquakeAdapter extends
 
     @Override
     public void onBindViewHolder(EarthquakeAdapterViewHolder holder, int position) {
+        /** @param earthquakeModel get perdata item position*/
         EarthquakeModel earthquakeModel = mQuakeData.get(position);
 
+        /** converting for helpers*/
         String magnitude = Helpers.formatMagnitude(earthquakeModel.getmMag());
         String placeResult = earthquakeModel.getmPlace();
         String time = String.valueOf(earthquakeModel.getmTime());
+        int magnitudeColor = getMagnitudeColor(earthquakeModel.getmMag());
 
+        /** set value */
         if (placeResult.contains("of ")){
             String splitResult [] = placeResult.split("of ", 2);
             holder.mLocationSpesific.setText(splitResult[0] + "of");
@@ -173,6 +184,7 @@ public class EarthquakeAdapter extends
 
         holder.mDate.setText(Helpers.convertUnixDay(time));
         holder.mDate_time.setText(Helpers.convertUnixTime(time));
+        holder.magnitudeCircle.setColor(magnitudeColor);
     }
 
     @Override
@@ -180,17 +192,29 @@ public class EarthquakeAdapter extends
         return mQuakeData.size();
     }
 
-    public class EarthquakeAdapterViewHolder extends RecyclerView.ViewHolder{
+    public class EarthquakeAdapterViewHolder extends RecyclerView.ViewHolder
+    implements View.OnClickListener{
 
         TextView mMagnitude, mDate, mDate_time, mPlace, mLocationSpesific;
+        ImageView mImageBackground;
+        GradientDrawable magnitudeCircle;
 
         public EarthquakeAdapterViewHolder(View itemView) {
             super(itemView);
+            mImageBackground = (ImageView) itemView.findViewById(R.id.imagebackground);
+            magnitudeCircle = (GradientDrawable) mImageBackground.getBackground();
             mMagnitude = (TextView) itemView.findViewById(R.id.magnitude);
             mDate = (TextView) itemView.findViewById(R.id.date);
             mDate_time = (TextView) itemView.findViewById(R.id.date_time);
             mPlace = (TextView) itemView.findViewById(R.id.location);
             mLocationSpesific = (TextView) itemView.findViewById(R.id.location_spesific);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosisition = getAdapterPosition();
+            EarthquakeModel itemOnlick = mQuakeData.get(adapterPosisition);
+            mClickHandler.onClickItem(itemOnlick);
         }
     }
 
@@ -198,4 +222,6 @@ public class EarthquakeAdapter extends
         mQuakeData = quekeData;
         notifyDataSetChanged();
     }
+
+
 }
