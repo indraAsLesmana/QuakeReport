@@ -38,7 +38,6 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
 
     @Override
     protected void onStartLoading() {
-
         if (lastUrl != null) {
             if (dataEartchquake != null &&
                     mUrl.trim().equals(lastUrl.trim())) {
@@ -47,16 +46,13 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<EarthquakeModel>
                 return;
             }
         }
-
         mProgresbar.setVisibility(View.VISIBLE);
         lastUrl = mUrl.trim();
         forceLoad();
-
     }
 
     @Override
     public ArrayList<EarthquakeModel> loadInBackground() {
-
         if (!TextUtils.isEmpty(mUrl)) {
             makeLogInfo("Network Load");
             dataEartchquake = Utils.fetchEarthquakeData(mUrl);
