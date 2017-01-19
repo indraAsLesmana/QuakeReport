@@ -267,6 +267,9 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 intent = new Intent(this, ChatActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_logout: // logout action
+                AuthUI.getInstance().signOut(this);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
