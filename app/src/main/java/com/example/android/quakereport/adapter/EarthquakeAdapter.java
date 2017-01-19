@@ -142,7 +142,7 @@ public class EarthquakeAdapter extends
         public void onClick(View v) {
             int adapterPosisition = getAdapterPosition();
             EarthquakeModel itemOnlick = mQuakeData.get(adapterPosisition);
-            mClickHandler.onClickItem(itemOnlick, adapterPosisition);
+            mClickHandler.onClickItem(itemOnlick, EarthquakeAdapterViewHolder.this, adapterPosisition);
         }
     }
 
@@ -152,7 +152,7 @@ public class EarthquakeAdapter extends
     }
 
     public interface EarthquakeAdapterOnClickHandler {
-        void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition);
+        void onClickItem(EarthquakeModel weatherForDay, EarthquakeAdapterViewHolder itemView, int adapterPosisition);
     }
 
 }

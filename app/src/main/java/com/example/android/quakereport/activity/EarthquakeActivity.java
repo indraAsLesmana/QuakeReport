@@ -25,10 +25,12 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,8 +42,6 @@ import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.loader.EarthquakeLoader;
 import com.example.android.quakereport.model.EarthquakeModel;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity implements
@@ -56,6 +56,10 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private TextView mEmpetyView;
     private ProgressBar mProgressBar;
     SharedPreferences sharedPreferences;
+
+    private static boolean onSelect;
+    private ArrayList<String> onSelectedMode;
+
 
 
     @Override
@@ -103,6 +107,8 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 PreferenceManager.getDefaultSharedPreferences(EarthquakeActivity.this);
         sharedPreferences.
                 registerOnSharedPreferenceChangeListener(this);
+
+        onSelect = false;
     }
 
     /**
@@ -176,7 +182,6 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 startActivity(intent);
                 return true;
             case R.id.action_sort:
-
                 String result = sharedPreferences.getString(
                         getString(R.string.settings_order_by_key),
                         getString(R.string.settings_order_by_default));
@@ -186,18 +191,33 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 }else {
                     setItByTime(false);
                 }
+                return true;
+            case R.id.action_select:
+
+                if (onSelect){item.setIcon(R.drawable.ic_check_box_white_24dp);
+                    onSelect = false;
+                }else {item.setIcon(R.drawable.ic_indeterminate_check_box_white_24dp);
+                    onSelect = true;
+                }
 
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onClickItem(EarthquakeModel weatherForDay, int adapterPosisition) {
-        if (weatherForDay.getmUrl().isEmpty()){
-            return;
+    public void onClickItem(EarthquakeModel weatherForDay,
+                            EarthquakeAdapter.EarthquakeAdapterViewHolder itemView,
+                            int adapterPosisition) {
+        if (!onSelect){ //onSelectMode off
+            if (weatherForDay.getmUrl().isEmpty()){
+                return;
+            }
+            openWebPage(weatherForDay.getmUrl());
+        }else {
+
         }
-        openWebPage(weatherForDay.getmUrl());
     }
 
     @Override
