@@ -40,7 +40,6 @@ import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.loader.EarthquakeLoader;
 import com.example.android.quakereport.model.EarthquakeModel;
-import com.example.android.quakereport.model.UserProfileModel;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,7 +67,6 @@ public class EarthquakeActivity extends AppCompatActivity implements
     //Firebase
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mFirebaseAuthListener;
-    private String mUsername;
     private int RC_SIGN_IN = 3214; // uniqe id for startActivityForResult
     private ChildEventListener childEventListener;
 
@@ -152,7 +150,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
     }
 
     private void onSignInInitialize(FirebaseUser user) {
-        mUsername = user.getEmail();
+        ChatActivity.mUSERNAME = user.getEmail();
 
     }
 
