@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.quakereport"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -26,5 +26,17 @@ dependencies {
     compile 'com.android.support:preference-v14:23.4.0'
     compile 'joda-time:joda-time:2.9.4'
     compile 'com.android.support:design:23.4.0'
+
+    //chat require
+    // Displaying images
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+    //firebase
+    compile 'com.google.firebase:firebase-database:9.8.0'
+    compile 'com.google.firebase:firebase-auth:9.8.0'
+    compile 'com.google.firebase:firebase-messaging:9.8.0'
+
+    //library FirebaseUi
+    compile 'com.firebaseui:firebase-ui-auth:1.0.0'
+
     testCompile 'junit:junit:4.12'
 }
