@@ -22,15 +22,14 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +40,14 @@ import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.loader.EarthquakeLoader;
 import com.example.android.quakereport.model.EarthquakeModel;
+import com.example.android.quakereport.model.UserProfileModel;
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EarthquakeActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<EarthquakeModel>>,
@@ -60,7 +65,12 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private static boolean onSelect;
     private ArrayList<String> onSelectedMode;
 
-
+    //Firebase
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mFirebaseAuthListener;
+    private String mUsername;
+    private int RC_SIGN_IN = 3214; // uniqe id for startActivityForResult
+    private ChildEventListener childEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +82,9 @@ public class EarthquakeActivity extends AppCompatActivity implements
         mProgressBar = (ProgressBar)findViewById(R.id.loading_spinner);
         mEmpetyView = (TextView)findViewById(R.id.textEmpety);
         mRecycleview = (RecyclerView) findViewById(R.id.list);
+
+        //Firebase instance
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         /*
          *  This value should be true if you want to reverse your layout. Generally, this is only
@@ -87,28 +100,78 @@ public class EarthquakeActivity extends AppCompatActivity implements
         mRecycleview.setLayoutManager(layoutManager);
         mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, this);
 
-        if (Helpers.checkingNeworkStatus(this)){
-            // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
-
-            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-            // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null, this);
-
-            //try inline code, work perfectly
-            //getLoaderManager().initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,this);
-        }else {
-            mProgressBar.setVisibility(View.GONE);
-            mEmpetyView.setText(getResources().getString(R.string.no_internet_connection));
-        }
-
         sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(EarthquakeActivity.this);
         sharedPreferences.
                 registerOnSharedPreferenceChangeListener(this);
 
         onSelect = false;
+
+        /**
+         * -----------------------
+         * Handle User Login State
+         * -----------------------
+         * */
+        mFirebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null){
+                    // user login
+                    onSignInInitialize(user);
+
+                    //load data after sign in success
+                    if (Helpers.checkingNeworkStatus(EarthquakeActivity.this)){
+                        LoaderManager loaderManager = getLoaderManager();
+
+                        loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,
+                                EarthquakeActivity.this);
+
+                        //try inline code, work perfectly
+                        //getLoaderManager().initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,this);
+                    }else {
+                        mProgressBar.setVisibility(View.GONE);
+                        mEmpetyView.setText(getResources().getString(
+                                R.string.no_internet_connection));
+                    }
+
+                }else {
+                    // user not loggin
+
+                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+                            .setProviders(Arrays.asList(
+                                    new AuthUI.IdpConfig.Builder(
+                                            AuthUI.EMAIL_PROVIDER).build(),
+                                    new AuthUI.IdpConfig.Builder(
+                                            AuthUI.GOOGLE_PROVIDER).build()))
+                            .setIsSmartLockEnabled(false)
+                            .build(), RC_SIGN_IN);
+                }
+            }
+        };
+    }
+
+    private void onSignInInitialize(FirebaseUser user) {
+        mUsername = user.getEmail();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN){
+            switch (resultCode) {
+                case RESULT_OK:
+                    Toast.makeText(this, "You're sign in", Toast.LENGTH_SHORT).show();
+                    return;
+                case RESULT_CANCELED:
+                    Toast.makeText(this, "You're cancel sign in", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                default:
+                    Toast.makeText(this, "Undifiend result", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
@@ -177,11 +240,11 @@ public class EarthquakeActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
-            case R.id.action_settings:
+            case R.id.action_settings: //go to setting
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.action_sort:
+            case R.id.action_sort: // sort data
                 String result = sharedPreferences.getString(
                         getString(R.string.settings_order_by_key),
                         getString(R.string.settings_order_by_default));
@@ -192,7 +255,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
                     setItByTime(false);
                 }
                 return true;
-            case R.id.action_select:
+            case R.id.action_select: // action select
 
                 if (onSelect){item.setIcon(R.drawable.ic_check_box_white_24dp);
                     onSelect = false;
@@ -200,7 +263,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
                     onSelect = true;
                 }
                 return true;
-            case R.id.action_chat:
+            case R.id.action_chat: // go to chat
                 intent = new Intent(this, ChatActivity.class);
                 startActivity(intent);
                 return true;
@@ -236,6 +299,18 @@ public class EarthquakeActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFirebaseAuth.removeAuthStateListener(mFirebaseAuthListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mFirebaseAuthListener);
     }
 
     private void setItByTime (boolean bool) {
