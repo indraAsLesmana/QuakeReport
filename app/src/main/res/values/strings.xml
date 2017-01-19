@@ -52,5 +52,6 @@
     <string name="action_chat">Chat</string>
     <string name="chat">Chat</string>
     <string name="logout">Logout</string>
+    <string name="btn_send">Send</string>
 
 </resources>
