@@ -49,5 +49,7 @@
     <string name="data_setting">Data Setting</string>
     <string name="about_apps">About</string>
     <string name="short_result">Short</string>
+    <string name="action_chat">Chat</string>
+    <string name="chat">Chat</string>
 
 </resources>

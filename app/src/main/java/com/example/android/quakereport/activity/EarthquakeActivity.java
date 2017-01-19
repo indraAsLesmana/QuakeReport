@@ -199,9 +199,11 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 }else {item.setIcon(R.drawable.ic_indeterminate_check_box_white_24dp);
                     onSelect = true;
                 }
-
                 return true;
-
+            case R.id.action_chat:
+                intent = new Intent(this, ChatActivity.class);
+                startActivity(intent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
