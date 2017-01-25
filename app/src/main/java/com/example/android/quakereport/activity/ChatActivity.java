@@ -68,7 +68,7 @@ public class ChatActivity extends AppCompatActivity {
 
         mChilEventListener = new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) { //handle refresh every new data insert on child "Message"
                 ChatModel chatModel = dataSnapshot.getValue(ChatModel.class);
                 mChatAdapter.add(chatModel);
             }
