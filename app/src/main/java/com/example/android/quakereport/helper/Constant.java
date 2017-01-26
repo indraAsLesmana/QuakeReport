@@ -17,6 +17,8 @@ public class Constant {
     public static final String MAIN_URL_DINAMIC =
             "http://earthquake.usgs.gov/fdsnws/event/1/query";
 
+    public static final String BASE_URL = "http://earthquake.usgs.gov"; //try with retrofit 2.0
+
 
     public static final Locale DEFAULT_LOCALE = new Locale("en", "US");
     public static final SimpleDateFormat DATE_FORMAT_MMM_DD_YY =
