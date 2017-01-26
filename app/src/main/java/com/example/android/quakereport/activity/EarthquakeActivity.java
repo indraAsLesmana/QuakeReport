@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.adapter.EarthquakeAdapter;
+import com.example.android.quakereport.helper.BaseAPI;
 import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.loader.EarthquakeLoader;
@@ -47,6 +48,13 @@ import com.google.firebase.database.ChildEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit2.Retrofit;
 
 public class EarthquakeActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<EarthquakeModel>>,
@@ -118,15 +126,40 @@ public class EarthquakeActivity extends AppCompatActivity implements
                     // user login
                     onSignInInitialize(user);
 
+                    //Creating a rest adapter
+                    RestAdapter adapter = new RestAdapter.Builder()
+                            .setEndpoint(Constant.BASE_URL)
+                            .setLogLevel(RestAdapter.LogLevel.FULL)
+                            .build();
+
+                    //Creating an object of our api interface
+                    BaseAPI api = adapter.create(BaseAPI.class);
+
+                    //Defining the method
+                    api.getEarthquake("geojson", "earthquake", "magnitude", 6, 10,
+                            new Callback<EarthquakeModel>() {
+                                @Override
+                                public void success(EarthquakeModel earthquakeModel, Response response) {
+                                    Log.i(TAG, "success load: " + earthquakeModel.getmPlace());
+                                    Toast.makeText(EarthquakeActivity.this, ""+ earthquakeModel.getmUrl(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Log.d(TAG, "failure: "+ error.getMessage());
+                                }
+                            });
+
                     //load data after sign in success
                     if (Helpers.checkingNeworkStatus(EarthquakeActivity.this)){
-                        LoaderManager loaderManager = getLoaderManager();
+                        /*LoaderManager loaderManager = getLoaderManager();
 
                         loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,
-                                EarthquakeActivity.this);
+                                EarthquakeActivity.this);*/
+                        //try with retrofit
 
-                        //try inline code, work perfectly
-                        //getLoaderManager().initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,this);
+
+
                     }else {
                         mProgressBar.setVisibility(View.GONE);
                         mEmpetyView.setText(getResources().getString(

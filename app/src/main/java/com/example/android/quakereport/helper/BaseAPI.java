@@ -2,9 +2,9 @@ package com.example.android.quakereport.helper;
 
 import com.example.android.quakereport.model.EarthquakeModel;
 
-import retrofit2.Callback;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit.Callback;
+import retrofit.http.GET;
+import retrofit.http.Query;
 
 /**
  * Created by indraaguslesmana on 1/26/17.
@@ -40,7 +40,7 @@ public interface BaseAPI {
         uriBuilder.appendQueryParameter("minmag", minMagnitude);
         uriBuilder.appendQueryParameter("limit", minVieweddata);
     */
-    @GET("/fdsnws/event/1")
+    @GET("/fdsnws/event/1/query")
         void getEarthquake(
             @Query("format") String format,
             @Query("eventtype") String event,
