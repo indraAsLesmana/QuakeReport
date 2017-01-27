@@ -2,6 +2,8 @@ package com.example.android.quakereport.helper;
 
 import com.example.android.quakereport.model.EarthquakeModel;
 
+import java.util.List;
+
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -47,5 +49,5 @@ public interface BaseAPI {
             @Query("orderby") String orderBy,
             @Query("minmag") int minMag,
             @Query("limit") int limitView,
-            Callback<EarthquakeModel> callback);
+            Callback <List<EarthquakeModel>> callback);
 }

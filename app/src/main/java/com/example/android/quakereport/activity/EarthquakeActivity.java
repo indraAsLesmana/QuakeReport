@@ -137,34 +137,22 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
                     //Defining the method
                     api.getEarthquake("geojson", "earthquake", "magnitude", 6, 10,
-                            new Callback<EarthquakeModel>() {
+                            new Callback<List<EarthquakeModel>>() {
                                 @Override
-                                public void success(EarthquakeModel earthquakeModel, Response response) {
-                                    Log.i(TAG, "success load: " + earthquakeModel.getmPlace());
-                                    Toast.makeText(EarthquakeActivity.this, ""+ earthquakeModel.getmUrl(), Toast.LENGTH_SHORT).show();
+                                public void success(List<EarthquakeModel> earthquakeModels, Response response) {
+                                    if (earthquakeModels != null){
+                                        mAdapter.setEarthquake(earthquakeModels);
+                                        mProgressBar.setVisibility(View.INVISIBLE);
+                                        mRecycleview.setVisibility(View.VISIBLE);
+                                    }
+                                    Log.d(TAG, "success: " + earthquakeModels.toString());
                                 }
 
                                 @Override
                                 public void failure(RetrofitError error) {
-                                    Log.d(TAG, "failure: "+ error.getMessage());
+                                    Log.d(TAG, "failure: " + error.getMessage());
                                 }
                             });
-
-                    //load data after sign in success
-                    if (Helpers.checkingNeworkStatus(EarthquakeActivity.this)){
-                        /*LoaderManager loaderManager = getLoaderManager();
-
-                        loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,
-                                EarthquakeActivity.this);*/
-                        //try with retrofit
-
-
-
-                    }else {
-                        mProgressBar.setVisibility(View.GONE);
-                        mEmpetyView.setText(getResources().getString(
-                                R.string.no_internet_connection));
-                    }
 
                 }else {
                     // user not loggin
