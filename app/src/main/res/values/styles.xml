@@ -33,14 +33,28 @@
     <style name="text_itemstyle_medium">
         <item name="android:textAppearance">?android:textAppearanceSmall</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
+        <item name="android:textColor">@color/secondaryText</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="text_itemstyle_chat_user" parent="text_itemstyle_medium">
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
+    <style name="text_itemstyle_medium_list" parent="text_itemstyle_medium">
         <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:textColor">@color/colorText_time</item>
     </style>
 
     <style name="text_itemstyle_large">
         <item name="android:textAppearance">?android:textAppearanceMedium</item> <!-- fix with this-->
         <!-- <item name="android:textSize">?android:textAppearanceMedium</item>--> <!--this make error infalating-->
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

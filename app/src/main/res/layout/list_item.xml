@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:padding="@dimen/margin_right">
 
@@ -22,7 +23,7 @@
             style="@style/text_itemstyle_large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="7.6"
+            tools:text="7.6"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:textColor="@android:color/white"
@@ -38,12 +39,12 @@
 
         <TextView
             android:id="@+id/location_spesific"
-            style="@style/text_itemstyle_medium"
+            style="@style/text_itemstyle_medium_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="bottom"
-            android:text="unknown"
+            tools:text="unknown"
             />
 
         <TextView
@@ -54,7 +55,7 @@
             android:layout_weight="1"
             android:gravity="top"
             android:textStyle="bold"
-            android:text="unknown"
+            tools:text="unknown"
             android:layout_marginLeft="16dp"
             android:ellipsize="end"
             android:maxLines="2"
@@ -75,7 +76,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="right|bottom"
-            android:text="date"
+            tools:text="date"
             />
 
         <TextView
@@ -85,7 +86,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="right|top"
-            android:text="time"
+            tools:text="time"
             />
 
     </LinearLayout>
