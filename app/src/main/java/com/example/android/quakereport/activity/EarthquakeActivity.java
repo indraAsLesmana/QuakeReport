@@ -98,6 +98,22 @@ public class EarthquakeActivity extends AppCompatActivity implements
         mRecycleview.setLayoutManager(layoutManager);
         mAdapter = new EarthquakeAdapter(EarthquakeActivity.this, this);
 
+        if (Helpers.checkingNeworkStatus(this)){
+            // Get a reference to the LoaderManager, in order to interact with loaders.
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null, this);
+
+            //try inline code, work perfectly
+            //getLoaderManager().initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,this);
+        }else {
+            mProgressBar.setVisibility(View.GONE);
+            mEmpetyView.setText(getResources().getString(R.string.no_internet_connection));
+        }
+
         sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(EarthquakeActivity.this);
         sharedPreferences.
@@ -117,21 +133,6 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 if (user != null){
                     // user login
                     onSignInInitialize(user);
-
-                    //load data after sign in success
-                    if (Helpers.checkingNeworkStatus(EarthquakeActivity.this)){
-                        LoaderManager loaderManager = getLoaderManager();
-
-                        loaderManager.initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,
-                                EarthquakeActivity.this);
-
-                        //try inline code, work perfectly
-                        //getLoaderManager().initLoader(Constant.EARTHQUEAKE_ACTIVITY_ID, null,this);
-                    }else {
-                        mProgressBar.setVisibility(View.GONE);
-                        mEmpetyView.setText(getResources().getString(
-                                R.string.no_internet_connection));
-                    }
 
                 }else {
                     // user not loggin
