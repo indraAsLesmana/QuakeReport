@@ -20,14 +20,21 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionButtonStyle">@style/actionButtonStyle</item>
-        <item name="preferenceTheme">
-            @style/PreferenceThemeOverlay.v14.Material
-        </item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="actionButtonStyle" parent="AppTheme">
         <item name="android:minWidth">68dp</item>
         <item name="android:padding">0dp</item>
+    </style>
+
+    <style name="ActionBar.Solid.Quake.Title" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome|showTitle</item>
+        <item name="logo">@drawable/tw__ic_logo_default</item>
+    </style>
+
+    <style name="AppTheme.WithLogo" parent="AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Quake.Title</item>
     </style>
 
     <style name="text_itemstyle_medium">
