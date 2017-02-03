@@ -32,4 +32,15 @@ public class Constant {
      * uniqe ID per activity
      * */
     public final static int EARTHQUEAKE_ACTIVITY_ID = 101;
+
+    /**
+     * Key child on firebase server
+     * */
+    public static final String KEY_MESSAGES = "messages";
+    public static final String KEY_CHAT_PHOTOS = "chat_photos";
+
+    /**
+     * mime type
+     * */
+    public static final String IMAGE_TYPE = "image/jpeg";
 }

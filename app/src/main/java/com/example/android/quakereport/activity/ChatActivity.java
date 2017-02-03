@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.adapter.ChatAdapter;
+import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.model.ChatModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,9 +59,9 @@ public class ChatActivity extends AppCompatActivity {
 
         //initialize firebase
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mMessageDatabaseReference = mFirebaseDatabase.getReference().child("messages");
+        mMessageDatabaseReference = mFirebaseDatabase.getReference().child(Constant.KEY_MESSAGES);
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mStorageReference = mFirebaseStorage.getReference().child("chat_photos");
+        mStorageReference = mFirebaseStorage.getReference().child(Constant.KEY_CHAT_PHOTOS);
 
         //initialize adapter
         List<ChatModel> chatModels = new ArrayList<>();
@@ -87,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setType("image/jpeg");
+                intent.setType(Constant.IMAGE_TYPE);
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
             }
