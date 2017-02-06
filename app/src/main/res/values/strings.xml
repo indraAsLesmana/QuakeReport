@@ -53,5 +53,8 @@
     <string name="chat">Chat</string>
     <string name="logout">Logout</string>
     <string name="btn_send">Send</string>
+    <string name="chat_notification_title">You have new Messages!</string>
+    <string name="chat_notification_contextText">You Have New Message Context</string>
+    <string name="chat_notifcation_body">You Have New Message Body</string>
 
 </resources>

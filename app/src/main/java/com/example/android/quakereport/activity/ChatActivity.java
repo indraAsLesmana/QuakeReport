@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -12,11 +13,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.android.quakereport.R;
+import com.example.android.quakereport.Services.ChatNotifService;
 import com.example.android.quakereport.adapter.ChatAdapter;
+import com.example.android.quakereport.helper.ChatRemiderTask;
 import com.example.android.quakereport.helper.Constant;
+import com.example.android.quakereport.helper.Notification;
 import com.example.android.quakereport.model.ChatModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +37,7 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity {
 
     private static final int RC_PHOTO_PICKER = 2001;
+    private static final String TAG = ChatActivity.class.getSimpleName();
     private ImageButton mBtn_send;
     private EditText mChat_text;
     private ChatAdapter mChatAdapter;
@@ -44,7 +50,6 @@ public class ChatActivity extends AppCompatActivity {
     private ChildEventListener mChilEventListener;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageReference;
-
     public static String mUSERNAME;
 
     @Override
@@ -99,6 +104,8 @@ public class ChatActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) { //handle refresh every new data insert on child "Message"
                 ChatModel chatModel = dataSnapshot.getValue(ChatModel.class);
                 mChatAdapter.add(chatModel);
+                Log.d(TAG, "onChildAdded: " + "im call");
+                Notification.createNotifChat(ChatActivity.this);
             }
 
             @Override
@@ -135,6 +142,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+
     private void uploadImage(Intent data) {
         Uri seletedImage = data.getData();
         StorageReference photoRef =
@@ -155,4 +163,12 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void createNotif() {
+        Intent createNotif = new Intent(this, ChatNotifService.class);
+        createNotif.setAction(ChatRemiderTask.ACTION_TO_CHAT_THREAD);
+        startService(createNotif);
+    }
+
 }

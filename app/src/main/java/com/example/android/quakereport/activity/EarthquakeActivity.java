@@ -63,7 +63,6 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
     private static boolean onSelect;
     private ArrayList<String> onSelectedMode;
-
     //Firebase
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mFirebaseAuthListener;
