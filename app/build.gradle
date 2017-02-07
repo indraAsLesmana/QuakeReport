@@ -40,6 +40,12 @@ dependencies {
     //library FirebaseUi
     compile 'com.firebaseui:firebase-ui-auth:1.0.0'
 
+    //QuickBlox
+    compile("com.quickblox:quickblox-android-sdk-chat:3.3.0")
+    compile("com.quickblox:quickblox-android-sdk-content:3.3.0")
+    compile ("com.quickblox:quickblox-android-sdk-messages:3.3.0" )
+
+
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

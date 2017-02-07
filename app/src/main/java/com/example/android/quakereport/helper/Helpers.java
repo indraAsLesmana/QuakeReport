@@ -1,9 +1,12 @@
 package com.example.android.quakereport.helper;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+
+import com.example.android.quakereport.R;
 
 import org.joda.time.DateTime;
 
@@ -16,6 +19,8 @@ import java.util.TimeZone;
  */
 
 public class Helpers {
+
+    private static ProgressDialog sProgressDialog;
 
     /**
      * THis helper convert UnixTimeStamp
@@ -61,6 +66,27 @@ public class Helpers {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         return isConnected;
+    }
+
+    /**
+     * Show progress dialog, can only be called once per tier (show-hide)
+     */
+    public static void showProgressDialog(Context ctx, int bodyStringId) {
+        if(sProgressDialog == null) {
+            sProgressDialog = ProgressDialog.show(ctx,
+                    ctx.getString(R.string.progress_title_default),
+                    ctx.getString(bodyStringId), true, false, null);
+        }
+    }
+
+    /**
+     * Hide current progress dialog and set to NULL
+     */
+    public static void hideProgressDialog() {
+        if(sProgressDialog != null && sProgressDialog.isShowing()) {
+            sProgressDialog.dismiss();
+            sProgressDialog = null;     // so it can be called in the next showProgressDialog
+        }
     }
 
     public static void makeLogInfo(String tag, String message) {

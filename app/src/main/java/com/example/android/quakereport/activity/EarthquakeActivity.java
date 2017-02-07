@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,10 +41,15 @@ import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.Helpers;
 import com.example.android.quakereport.loader.EarthquakeLoader;
 import com.example.android.quakereport.model.EarthquakeModel;
+import com.example.android.quakereport.model.QBConfig;
+import com.example.android.quakereport.utility.FunctionUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
+import com.google.gson.Gson;
+import com.quickblox.auth.session.QBSettings;
+import com.quickblox.core.ServiceZone;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +66,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private TextView mEmpetyView;
     private ProgressBar mProgressBar;
     SharedPreferences sharedPreferences;
+    private static EarthquakeActivity sInstance;
 
     private static boolean onSelect;
     private ArrayList<String> onSelectedMode;
@@ -69,10 +76,15 @@ public class EarthquakeActivity extends AppCompatActivity implements
     private int RC_SIGN_IN = 3214; // uniqe id for startActivityForResult
     private ChildEventListener childEventListener;
 
+    public static EarthquakeActivity getsInstance() {
+        return sInstance;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
+        sInstance = this;
         /**
          * initial all view
          * */
@@ -335,4 +347,21 @@ public class EarthquakeActivity extends AppCompatActivity implements
             startActivity(intent);
         }
     }
+
+    private void initQBCredential(){
+        String content = FunctionUtil.readFileFromAssets("qb_config.json", this);
+        QBConfig qbConfigs = new Gson().fromJson(content, QBConfig.class);
+
+        QBSettings.getInstance().init(getApplicationContext(), qbConfigs.getApp_id(),
+                qbConfigs.getAuth_key(), qbConfigs.getAuth_secret());
+        QBSettings.getInstance().setAccountKey(qbConfigs.getAccount_key());
+
+        if (!TextUtils.isEmpty(qbConfigs.getApi_domain()) &&
+                !TextUtils.isEmpty(qbConfigs.getChat_domain())) {
+            QBSettings.getInstance().setEndpoints(qbConfigs.getApi_domain(),
+                    qbConfigs.getChat_domain(), ServiceZone.PRODUCTION);
+            QBSettings.getInstance().setZone(ServiceZone.PRODUCTION);
+        }
+    }
+
 }
