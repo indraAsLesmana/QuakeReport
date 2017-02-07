@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.android.quakereport.R;
 import com.example.android.quakereport.Services.ChatNotifService;
 import com.example.android.quakereport.adapter.ChatAdapter;
+import com.example.android.quakereport.callback.QbChatDialogMessageListenerImp;
 import com.example.android.quakereport.helper.ChatRemiderTask;
 import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.Notification;
@@ -30,6 +31,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.quickblox.chat.QBChatService;
+import com.quickblox.chat.model.QBChatDialog;
+import com.quickblox.chat.model.QBChatMessage;
+
+import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.chat.ChatMessageListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +51,13 @@ public class ChatActivity extends AppCompatActivity {
     private ListView mMessageListview;
     private ImageButton mImageSelect;
 
-    //firebase
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mMessageDatabaseReference;
-    private ChildEventListener mChilEventListener;
-    private FirebaseStorage mFirebaseStorage;
-    private StorageReference mStorageReference;
+    //quickblox
+    private ConnectionListener chatConnectionListener;
+    private QBChatDialog qbChatDialog;
+    private ArrayList<QBChatMessage> unShownMessages;
+    private ChatMessageListener chatMessageListener;
+
+    public static final String EXTRA_DIALOG_ID = "dialogId";
     public static String mUSERNAME;
 
     @Override
@@ -62,31 +70,18 @@ public class ChatActivity extends AppCompatActivity {
         mMessageListview = (ListView) findViewById(R.id.list_chat);
         mImageSelect = (ImageButton) findViewById(R.id.imageSelect);
 
-        //initialize firebase
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mMessageDatabaseReference = mFirebaseDatabase.getReference().child(Constant.KEY_MESSAGES);
-        mFirebaseStorage = FirebaseStorage.getInstance();
-        mStorageReference = mFirebaseStorage.getReference().child(Constant.KEY_CHAT_PHOTOS);
-
         //initialize adapter
         List<ChatModel> chatModels = new ArrayList<>();
-        mChatAdapter = new ChatAdapter(this, R.layout.message_item, chatModels);
+//        mChatAdapter = new ChatAdapter(this, R.layout.message_item, chatModels);
         mMessageListview.setAdapter(mChatAdapter);
 
-        mBtn_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChatModel chatModel = new ChatModel(
-                        mChat_text.getText().toString(),
-                        mUSERNAME,
-                        null);
+        Log.v(TAG, "onCreate ChatActivity on Thread ID = " + Thread.currentThread().getId());
+        qbChatDialog = (QBChatDialog) getIntent().getSerializableExtra(EXTRA_DIALOG_ID);
+        qbChatDialog.initForChat(QBChatService.getInstance());
+        chatMessageListener = new ChatMessageListener();
+        qbChatDialog.addMessageListener(chatMessageListener);
 
-                mMessageDatabaseReference.push().setValue(chatModel);
 
-                // Clear input box
-                mChat_text.setText("");
-            }
-        });
 
         mImageSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,36 +94,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        mChilEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) { //handle refresh every new data insert on child "Message"
-                ChatModel chatModel = dataSnapshot.getValue(ChatModel.class);
-                mChatAdapter.add(chatModel);
-                Log.d(TAG, "onChildAdded: " + "im call");
-                Notification.createNotifChat(ChatActivity.this);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        mMessageDatabaseReference.addChildEventListener(mChilEventListener);
     }
 
     @Override
@@ -136,39 +101,28 @@ public class ChatActivity extends AppCompatActivity {
         if (requestCode == RC_PHOTO_PICKER){
             if (resultCode == RESULT_OK){
                 Toast.makeText(this, "Hold picture, for multiple select", Toast.LENGTH_SHORT).show();
-                uploadImage(data);
             }
         }
 
     }
 
-
-    private void uploadImage(Intent data) {
-        Uri seletedImage = data.getData();
-        StorageReference photoRef =
-                mStorageReference.child(seletedImage.getLastPathSegment());
-
-        UploadTask result = photoRef.putFile(seletedImage);
-
-        result.addOnSuccessListener(this,
-        new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(ChatActivity.this, "upload success", Toast.LENGTH_SHORT).show();
+    public void showMessage(QBChatMessage message) {
+        if (mChatAdapter != null) {
+            mChatAdapter.add(message);
+//            scrollMessageListDown();
+        } else {
+            if (unShownMessages == null) {
+                unShownMessages = new ArrayList<>();
             }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ChatActivity.this, "Upload failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+            unShownMessages.add(message);
+        }
     }
 
-
-    private void createNotif() {
-        Intent createNotif = new Intent(this, ChatNotifService.class);
-        createNotif.setAction(ChatRemiderTask.ACTION_TO_CHAT_THREAD);
-        startService(createNotif);
+    public class ChatMessageListener extends QbChatDialogMessageListenerImp {
+        @Override
+        public void processMessage(String s, QBChatMessage qbChatMessage, Integer integer) {
+            showMessage(qbChatMessage);
+        }
     }
 
 }
