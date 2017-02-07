@@ -5,6 +5,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.quakereport.R;
 
@@ -77,6 +82,26 @@ public class Helpers {
                     ctx.getString(R.string.progress_title_default),
                     ctx.getString(bodyStringId), true, false, null);
         }
+    }
+
+    /**
+     * This internal function to reduce redundancy showToast function
+     */
+    private static void initToast(Context context, Toast toast) {
+        ViewGroup toastLayout = (ViewGroup)toast.getView();
+        TextView toastTextView = (TextView)toastLayout.getChildAt(0);
+        float textSize = context.getResources().getDimension(R.dimen.toast_text_size);
+        toastTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+        toastTextView.setGravity(Gravity.CENTER);
+    }
+
+    /**
+     * Show toast from string
+     */
+    public static void showToast(Context ctx, String str, boolean needLong) {
+        Toast toast = Toast.makeText(ctx, str, needLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        initToast(ctx, toast);
+        toast.show();
     }
 
     /**

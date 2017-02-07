@@ -11,10 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.example.android.quakereport.R;
 import com.example.android.quakereport.callback.QbSessionStateCallback;
+import com.example.android.quakereport.helper.Helpers;
+import com.example.android.quakereport.utility.ChatHelper;
 import com.example.android.quakereport.utility.QBAuthUtil;
 import com.example.android.quakereport.utility.QBPreferenceUserUtil;
 
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.users.model.QBUser;
 
 public abstract class BaseChatActivity extends AppCompatActivity implements QbSessionStateCallback {
@@ -60,25 +65,9 @@ public abstract class BaseChatActivity extends AppCompatActivity implements QbSe
 
     protected abstract View getSnackbarAnchorView();
 
-    /*protected Snackbar showErrorSnackbar(@StringRes int resId, Exception e,
-                                         View.OnClickListener clickListener) {
-        return ErrorUtils.showSnackbar(getSnackbarAnchorView(), resId, e,
-                com.quickblox.sample.core.R.string.dlg_retry, clickListener);
-    }
-
-    private void recreateChatSession() {
-        Log.d(TAG, "Need to recreate chat session");
-
-        QBUser user = QBPreferenceUserUtil.getQbUser();
-        if (user == null) {
-            throw new RuntimeException("User is null, can't restore session");
-        }
-
-        reloginToChat(user);
-    }*/
 
     private void reloginToChat(final QBUser user) {
-       /* ProgressDialogFragment.show(getSupportFragmentManager(), R.string.dlg_restoring_chat_session);
+        Helpers.showProgressDialog(this, R.string.dlg_restoring_chat_session);
 
         ChatHelper.getInstance().login(user, new QBEntityCallback<Void>() {
             @Override
@@ -86,25 +75,19 @@ public abstract class BaseChatActivity extends AppCompatActivity implements QbSe
                 Log.v(TAG, "Chat login onSuccess()");
                 isAppSessionActive = true;
                 onSessionCreated(true);
+                Helpers.hideProgressDialog();
 
-                ProgressDialogFragment.hide(getSupportFragmentManager());
             }
 
             @Override
             public void onError(QBResponseException e) {
                 isAppSessionActive = false;
-                ProgressDialogFragment.hide(getSupportFragmentManager());
+                Helpers.hideProgressDialog();
                 Log.w(TAG, "Chat login onError(): " + e);
-                showErrorSnackbar(R.string.error_recreate_session, e,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                reloginToChat(user);
-                            }
-                        });
+                Helpers.showToast(BaseChatActivity.this,"Error recreate session", false);
                 onSessionCreated(false);
             }
-        });*/
+        });
     }
 
     private void recreateChatSession() {

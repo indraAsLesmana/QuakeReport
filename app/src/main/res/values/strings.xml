@@ -56,5 +56,7 @@
     <string name="chat_notification_title">You have new Messages!</string>
     <string name="chat_notification_contextText">You Have New Message Context</string>
     <string name="chat_notifcation_body">You Have New Message Body</string>
+    <string name="progress_title_default">Please wait...</string>
+    <string name="dlg_restoring_chat_session">Restoring chat session…</string>
 
 </resources>
