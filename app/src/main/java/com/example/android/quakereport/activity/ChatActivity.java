@@ -38,9 +38,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final int RC_PHOTO_PICKER = 2001;
     private static final String TAG = ChatActivity.class.getSimpleName();
+    private ChatAdapter mChatAdapter;
     private ImageButton mBtn_send;
     private EditText mChat_text;
-    private ChatAdapter mChatAdapter;
     private ListView mMessageListview;
     private ImageButton mImageSelect;
 

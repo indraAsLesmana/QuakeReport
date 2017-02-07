@@ -44,9 +44,15 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
+import com.quickblox.core.QBSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static quickblox.ConstantQuickBlox.ACCOUNT_KEY;
+import static quickblox.ConstantQuickBlox.APP_ID;
+import static quickblox.ConstantQuickBlox.AUTH_KEY;
+import static quickblox.ConstantQuickBlox.AUTH_SECRET;
 
 public class EarthquakeActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<EarthquakeModel>>,
@@ -151,6 +157,10 @@ public class EarthquakeActivity extends AppCompatActivity implements
 
     private void onSignInInitialize(FirebaseUser user) {
         ChatActivity.mUSERNAME = user.getEmail();
+
+        //initial quickbox
+        QBSettings.getInstance().init(getApplicationContext(), APP_ID, AUTH_KEY, AUTH_SECRET);
+        QBSettings.getInstance().setAccountKey(ACCOUNT_KEY);
 
     }
 

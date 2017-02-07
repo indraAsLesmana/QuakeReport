@@ -1,0 +1,25 @@
+{
+
+   /*follow sample*/
+   /*"app_id": "53324",
+   "auth_key": "zOsc9-bgVTCcnRN",
+   "auth_secret": "nAkevt-LtJ-dvtp",
+   "account_key": "3gkUNj6SEGn6EpHKyEHC",
+   "api_domain": "https://api.quickblox.com",
+   "chat_domain": "chat.quickblox.com",
+   "turnserver_endpoint": "turnserver.quickblox.com"
+*/
+   /*default generate from quickblock*/
+   "account_id":67059,
+   "api_endpoint":"https://api.quickblox.com",
+   "chat_endpoint":"chat.quickblox.com",
+   "turnserver_endpoint":"turnserver.quickblox.com",
+   "s3_bucket_name":"qbprod"
+
+   /*me
+   "app_id": "53324",
+   "auth_key": "zOsc9-bgVTCcnRN",
+   "auth_secret": "nAkevt-LtJ-dvtp",
+   "account_key": "3gkUNj6SEGn6EpHKyEHC",
+   */
+}
