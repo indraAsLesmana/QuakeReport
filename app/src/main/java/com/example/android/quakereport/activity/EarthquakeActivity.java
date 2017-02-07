@@ -272,7 +272,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 }
                 return true;
             case R.id.action_chat: // go to chat
-                intent = new Intent(this, ChatActivity.class);
+                intent = new Intent(this, ChatQuickBloxActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_logout: // logout action
