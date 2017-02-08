@@ -12,16 +12,15 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.android.quakereport.Quakereport;
 import com.example.android.quakereport.R;
-import com.example.android.quakereport.Services.ChatNotifService;
+import com.example.android.quakereport.Services.ChatNotifJobService;
 import com.example.android.quakereport.adapter.ChatAdapter;
 import com.example.android.quakereport.helper.ChatRemiderTask;
 import com.example.android.quakereport.helper.Constant;
-import com.example.android.quakereport.helper.Notification;
 import com.example.android.quakereport.model.ChatModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -63,8 +62,8 @@ public class ChatActivity extends AppCompatActivity {
         mImageSelect = (ImageButton) findViewById(R.id.imageSelect);
 
         //initialize firebase
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mMessageDatabaseReference = mFirebaseDatabase.getReference().child(Constant.KEY_MESSAGES);
+        mFirebaseDatabase = Quakereport.getmFirebaseDatabase();
+        mMessageDatabaseReference = Quakereport.getmMessageDatabaseReference();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageReference = mFirebaseStorage.getReference().child(Constant.KEY_CHAT_PHOTOS);
 
@@ -105,7 +104,6 @@ public class ChatActivity extends AppCompatActivity {
                 ChatModel chatModel = dataSnapshot.getValue(ChatModel.class);
                 mChatAdapter.add(chatModel);
                 Log.d(TAG, "onChildAdded: " + "im call");
-                Notification.createNotifChat(ChatActivity.this);
             }
 
             @Override
@@ -166,7 +164,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     private void createNotif() {
-        Intent createNotif = new Intent(this, ChatNotifService.class);
+        Intent createNotif = new Intent(this, ChatNotifJobService.class);
         createNotif.setAction(ChatRemiderTask.ACTION_TO_CHAT_THREAD);
         startService(createNotif);
     }

@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.content.ContextCompat;
 
 import com.example.android.quakereport.R;
-import com.example.android.quakereport.Services.ChatNotifService;
+import com.example.android.quakereport.Services.ChatNotifJobService;
 import com.example.android.quakereport.activity.EarthquakeActivity;
 
 /**
@@ -71,7 +71,7 @@ public class Notification {
     }
 
     private static Action chatReadAction(Context context) {
-        Intent chatRad = new Intent(context, ChatNotifService.class);
+        Intent chatRad = new Intent(context, ChatNotifJobService.class);
         chatRad.setAction(ChatRemiderTask.ACTION_TO_CHAT_THREAD);
         PendingIntent incrementWaterPendingIntent = PendingIntent.getService(
                 context,

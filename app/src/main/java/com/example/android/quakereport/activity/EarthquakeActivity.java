@@ -34,7 +34,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.quakereport.Quakereport;
 import com.example.android.quakereport.R;
+import com.example.android.quakereport.Services.ChatNotifService;
 import com.example.android.quakereport.adapter.EarthquakeAdapter;
 import com.example.android.quakereport.helper.Constant;
 import com.example.android.quakereport.helper.Helpers;
@@ -132,7 +134,6 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 if (user != null){
                     // user login
                     onSignInInitialize(user);
-
                 }else {
                     // user not loggin
 
@@ -150,8 +151,9 @@ public class EarthquakeActivity extends AppCompatActivity implements
     }
 
     private void onSignInInitialize(FirebaseUser user) {
-        ChatActivity.mUSERNAME = user.getEmail();
-
+        String userMail = user.getEmail();
+        ChatActivity.mUSERNAME = userMail;
+        Quakereport.setUserSession(userMail);
     }
 
     @Override
@@ -267,6 +269,7 @@ public class EarthquakeActivity extends AppCompatActivity implements
                 return true;
             case R.id.action_logout: // logout action
                 AuthUI.getInstance().signOut(this);
+                Quakereport.destroyUserSession();
                 return true;
         }
         return super.onOptionsItemSelected(item);

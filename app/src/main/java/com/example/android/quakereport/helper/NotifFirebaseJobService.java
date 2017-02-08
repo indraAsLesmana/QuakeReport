@@ -25,7 +25,6 @@ public class NotifFirebaseJobService extends JobService{
 
             @Override
             protected void onPostExecute(Object o) {
-
                 jobFinished(job, false);
             }
         };

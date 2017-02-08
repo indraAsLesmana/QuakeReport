@@ -43,4 +43,5 @@ public class Constant {
      * mime type
      * */
     public static final String IMAGE_TYPE = "image/jpeg";
+    public static final String PREFERENCE_USER_MAIL = "user-mail";
 }
