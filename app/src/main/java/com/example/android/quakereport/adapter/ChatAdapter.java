@@ -16,8 +16,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.example.android.quakereport.R;
 import com.example.android.quakereport.callback.PaginationHistoryListener;
+import com.example.android.quakereport.widget.MaskedImageView;
 import com.quickblox.chat.model.QBAttachment;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBChatMessage;
@@ -57,7 +57,7 @@ public class ChatAdapter extends BaseListAdapter<QBChatMessage> implements Stick
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.list_item_chat_message, parent, false);
 
-            holder.messageBodyTextView = (TextView) convertView.findViewById(R.id.text_image_message);
+            holder.messageBodyTextView = (TextView) convertView.findViewById(R.id.s);
             holder.messageAuthorTextView = (TextView) convertView.findViewById(R.id.text_message_author);
             holder.messageContainerLayout = (LinearLayout) convertView.findViewById(R.id.layout_chat_message_container);
             holder.messageBodyContainerLayout = (RelativeLayout) convertView.findViewById(R.id.layout_message_content_container);
