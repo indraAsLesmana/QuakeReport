@@ -40,6 +40,14 @@ public class Constant {
     public static final String KEY_CHAT_PHOTOS = "chat_photos";
 
     /**
+     * WaChat Key
+     * */
+    public static final String KEY_CHATS = "chats";
+    public static final String KEY_ROOMS = "rooms";
+    public static final String KEY_USERS = "users";
+
+
+    /**
      * mime type
      * */
     public static final String IMAGE_TYPE = "image/jpeg";

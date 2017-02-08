@@ -103,7 +103,6 @@ public class ChatActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) { //handle refresh every new data insert on child "Message"
                 ChatModel chatModel = dataSnapshot.getValue(ChatModel.class);
                 mChatAdapter.add(chatModel);
-                Log.d(TAG, "onChildAdded: " + "im call");
             }
 
             @Override
@@ -134,6 +133,7 @@ public class ChatActivity extends AppCompatActivity {
         if (requestCode == RC_PHOTO_PICKER){
             if (resultCode == RESULT_OK){
                 Toast.makeText(this, "Hold picture, for multiple select", Toast.LENGTH_SHORT).show();
+
                 uploadImage(data);
             }
         }
@@ -152,6 +152,11 @@ public class ChatActivity extends AppCompatActivity {
         new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Uri downloadurl = taskSnapshot.getDownloadUrl();
+                ChatModel chatModel =
+                        new ChatModel(null, mUSERNAME, downloadurl.toString());
+                mMessageDatabaseReference.push().setValue(chatModel);
+
                 Toast.makeText(ChatActivity.this, "upload success", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(this, new OnFailureListener() {
